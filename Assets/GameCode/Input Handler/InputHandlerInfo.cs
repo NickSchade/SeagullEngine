@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum eInput { Down, Held, Up }
 public class InputHandlerInfo
 {
     public KeyHandlerInfo _keyHandlerInfo;

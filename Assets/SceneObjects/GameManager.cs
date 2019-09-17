@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     // GRAPHICS
-    public HomelandsGraphicsManager _graphicsManager;
+    public GraphicsManager _graphicsManager;
     // INPUT
     public InputManager _inputManager;
     // GAME

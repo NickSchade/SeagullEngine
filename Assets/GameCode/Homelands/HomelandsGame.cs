@@ -5,25 +5,37 @@ using UnityEngine;
 
 public abstract partial class HomelandsGame
 {
-    public eTileShape _tileShape { get; set; }
+    protected GameManager _gameManager;
+
     public eGame _gameType { get; set; }
+    public eTileShape _tileShape { get; set; }
+
     public IKeyHandler _keyHandler { get; set; }
     public IMouseHandler _mouseHandler { get; set; }
 
+
+    public HomelandsViewer _viewer;
     public ILocationDrawer _locationDrawer { get; set; }
-
-    protected GameManager _gameManager;
-
     public Dictionary<Pos, ILocation> _locations;
+
     public ITickSystem _tickSystem;
+
 
     public HomelandsGame(GameManager gameManager)
     {
-        _gameManager = gameManager;
-        InitializeGame();
         Debug.Log("Constructing Homelands Game");
+        _gameManager = gameManager;
         _tileShape = gameManager._tileShape;
         _gameType = gameManager._gameType;
+        InitializeGame();
+    }
+    public virtual void InitializeGame()
+    {
+        _locationDrawer = LocationDrawerFactory.Make(_gameManager._locationDrawerType);
+        _locations = MapBuilder.Make(this);
+        _mouseHandler = new MouseHandlerHomelands(_locations);
+        _keyHandler = new KeyHandlerHomelands(this);
+        _viewer = new HomelandsViewer();
     }
 
     public virtual List<GraphicsData> DrawAll()
@@ -39,14 +51,7 @@ public abstract partial class HomelandsGame
     {
         return DrawAll();
     }
-    public virtual void InitializeGame()
-    {
-        _locationDrawer = LocationDrawerFactory.Make(_gameManager._locationDrawerType);
-        _locations = HomelandsMapBuilder.Make(this);
-        _mouseHandler = new MouseHandlerHomelands(_locations);
-        _keyHandler = new KeyHandlerHomelands();
-
-    }
+    
     public virtual TickInfo TakeTick(InputHandlerInfo inputHandlerInfo)
     {
         bool mouseHandle = _mouseHandler.HandleMouse(inputHandlerInfo._mouseHandlerInfo);

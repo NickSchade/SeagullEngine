@@ -12,15 +12,15 @@ public interface ILocation
 
 public static class LocationFactory
 {
-    public static ILocation Make(Pos p, eGame gameType, ILocationDrawer locationDrawer)
+    public static HomelandsLocation Make(Pos p, eGame gameType, ILocationDrawer locationDrawer)
     {
         if (gameType == eGame.Exodus)
         {
             return new ExodusLocation(p, locationDrawer);
         }
-        else if (gameType == eGame.HomelandsSandbox)
+        else if (gameType == eGame.Sandbox)
         {
-            return new HomelandsSandboxLocation(p, locationDrawer);
+            return new SandboxLocation(p, locationDrawer);
         }
         else
         {

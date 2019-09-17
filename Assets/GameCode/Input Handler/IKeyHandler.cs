@@ -7,11 +7,4 @@ public interface IKeyHandler
 {
     bool HandleKeys(KeyHandlerInfo keyHandlerInfo);
 }
-public class KeyHandlerHomelands : IKeyHandler
-{
-    public bool HandleKeys(KeyHandlerInfo keyHandlerInfo)
-    {
-        return false;
-    }
-}
 

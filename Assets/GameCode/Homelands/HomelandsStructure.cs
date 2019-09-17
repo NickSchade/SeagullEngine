@@ -13,7 +13,7 @@ public class HomelandsStructure : IStructure
         {
             _deathSystem = new ExodusStructureDeath();
         }
-        else if (gameType == eGame.HomelandsSandbox)
+        else if (gameType == eGame.Sandbox)
         {
             _deathSystem = new HomelandsSandboxStructureDeath();
         }

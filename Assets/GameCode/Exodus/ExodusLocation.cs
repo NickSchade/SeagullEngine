@@ -10,6 +10,18 @@ public class ExodusLocation : HomelandsLocation, ILocation
     {
 
     }
+
+    public override void TryToMakeStructure()
+    {
+        if (_structure == null)
+        {
+            _structure = StructureFactory.Make(eGame.Exodus);
+        }
+        else
+        {
+            Debug.Log("Can't Build");
+        }
+    }
 }
 
 public class ExodusLocationHabitability

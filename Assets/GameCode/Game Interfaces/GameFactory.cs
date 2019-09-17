@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum eGame { Exodus, HomelandsSandbox}
+public enum eGame { Exodus, Sandbox}
 
 public static class GameFactory
 {
@@ -13,9 +13,9 @@ public static class GameFactory
         {
             return new ExodusGame(gameManager);
         }
-        else if (gameType == eGame.HomelandsSandbox)
+        else if (gameType == eGame.Sandbox)
         {
-            return new HomelandsSandboxGame(gameManager);
+            return new SandboxGame(gameManager);
         }
         else
         {
@@ -25,9 +25,8 @@ public static class GameFactory
    
 }
 
-public enum eTileShape { SQUARE, HEX };
+public enum eTileShape { Square, Hex };
 public enum eVisibility { Visible, Fog, Unexplored };
-public enum eInput { Down, Held, Up}
 
 
 

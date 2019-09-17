@@ -13,10 +13,12 @@ public abstract class HomelandsLocation : ILocation
         _pos = pos;
         _drawer = locationDrawer;
     }
-    public void Click()
+    public virtual void Click()
     {
-        Debug.Log("Clicked HomelandsLocation at " + _pos.getName());
+        TryToMakeStructure();
     }
+
+    public abstract void TryToMakeStructure();
 
     public GraphicsData Draw()
     {
@@ -44,9 +46,3 @@ public abstract class HomelandsLocation : ILocation
     }
 }
 
-public class HomelandsSandboxLocation : HomelandsLocation, ILocation
-{
-    public HomelandsSandboxLocation(Pos pos, ILocationDrawer locationDrawer) : base(pos, locationDrawer)
-    {
-    }
-}

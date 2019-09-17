@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum eMap { Simple};
 
-public static class HomelandsMapBuilder
+public static class MapBuilder
 {
 
     public static Dictionary<Pos, ILocation> Make(HomelandsGame game)

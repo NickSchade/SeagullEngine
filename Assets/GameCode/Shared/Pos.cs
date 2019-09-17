@@ -19,10 +19,10 @@ public class Pos
     {
         switch (_tileShape)
         {
-            case eTileShape.SQUARE:
+            case eTileShape.Square:
                 mapLoc = new Loc(gridLoc.coordinates);
                 break;
-            case eTileShape.HEX:
+            case eTileShape.Hex:
                 float x = Mathf.Sqrt(3) * (gridLoc.x() - 0.5f * (gridLoc.y() % 2f)) / 1.9f;
                 float y = (3 / 2) * gridLoc.y() / 1.3f;
                 mapLoc = new Loc(x, y);

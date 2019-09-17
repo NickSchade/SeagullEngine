@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 435231376}
   - component: {fileID: 435231375}
   m_Layer: 0
-  m_Name: HomelandsGraphicsManager
+  m_Name: GraphicsManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -257,9 +257,9 @@ MonoBehaviour:
   _dynamic: {fileID: 1172114360}
   _prefabLocation: {fileID: 4261781104180398502, guid: 8a67a9080090b824abe0297c5f8ead87,
     type: 3}
-  _prefabStructure: {fileID: 4261781104180398502, guid: 8a67a9080090b824abe0297c5f8ead87,
+  _prefabStructure: {fileID: 4981926576501378888, guid: 5f73ff6c65315004f9c6f9d616b199c0,
     type: 3}
-  _prefabResource: {fileID: 4261781104180398502, guid: 8a67a9080090b824abe0297c5f8ead87,
+  _prefabResource: {fileID: 4920235199986870993, guid: 2e14f9ddbd86a394a853f65872efde69,
     type: 3}
   _gameManager: {fileID: 989124701}
 --- !u!4 &435231376

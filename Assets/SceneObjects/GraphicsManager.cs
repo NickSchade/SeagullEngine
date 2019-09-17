@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class HomelandsGraphicsManager : MonoBehaviour
+public class GraphicsManager : MonoBehaviour
 {
     public GameObject _dynamic;
 

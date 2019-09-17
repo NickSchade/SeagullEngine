@@ -6,10 +6,6 @@ public class HomelandsPosVisibility
 {
     public eVisibility _visibility;
 }
-public class HomelandsPlayer
-{
-    public HomelandsPlayerResources _resources;
-}
 public class HomelandsPosControl
 {
     List<HomelandsPlayer> _controllingPlayers;
@@ -41,8 +37,4 @@ public class HomelandsPosStats
     public HomelandsPosControl _control;
     public HomelandsPosExtraction _extraction;
     public HomelandsPosMilitary _military;
-}
-public class HomelandsPlayerResources
-{
-
 }
