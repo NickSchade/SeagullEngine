@@ -9,8 +9,8 @@ public interface IMouseHandler
 }
 public class MouseHandlerHomelands : IMouseHandler
 {
-    Dictionary<Pos, ILocation> _locations;
-    public MouseHandlerHomelands(Dictionary<Pos,ILocation> locations)
+    Dictionary<Pos, HomelandsLocation> _locations;
+    public MouseHandlerHomelands(Dictionary<Pos, HomelandsLocation> locations)
     {
         _locations = locations;
     }

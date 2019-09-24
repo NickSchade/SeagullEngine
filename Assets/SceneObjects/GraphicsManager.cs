@@ -17,7 +17,8 @@ public class GraphicsManager : MonoBehaviour
 
     public GameManager _gameManager;
 
-    float tileSpread = 1.0f;
+    float xSpread = 1.0f;
+    float ySpread = 1.0f;
     
     // Update is called once per frame
     void Update()
@@ -30,12 +31,14 @@ public class GraphicsManager : MonoBehaviour
         _locations = new Dictionary<Pos, GameObject>();
         _structures = new Dictionary<Pos, GameObject>();
         _resources = new Dictionary<Pos, GameObject>();
+
+        ySpread = _gameManager._tileShape == eTileShape.Square ? 1.0f : 1.3f;
     }
 
     GameObject InstantiateGo(GameObject pf, Pos p, Color c)
     {
         Loc l = p.mapLoc;
-        Vector3 pos = new Vector3(l.x() * tileSpread, l.z(), l.y() * tileSpread);
+        Vector3 pos = new Vector3(l.x() * xSpread, l.z(), l.y() * ySpread);
         GameObject go = Instantiate(pf, pos, Quaternion.identity, _dynamic.transform);
         go.GetComponentInChildren<Clickable>().setPos(p);
         SetColor(go, c);

@@ -13,8 +13,7 @@ public class GameManager : MonoBehaviour
     public eMap _mapType;
     public eTileShape _tileShape;
     public HomelandsGame _game;
-
-    public eLocationDrawer _locationDrawerType;
+    
     
 
     // Start is called before the first frame update

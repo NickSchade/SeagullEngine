@@ -405,8 +405,7 @@ MonoBehaviour:
   _inputManager: {fileID: 184092910}
   _gameType: 0
   _mapType: 0
-  _tileShape: 0
-  _locationDrawerType: 1
+  _tileShape: 1
 --- !u!1 &1172114360
 GameObject:
   m_ObjectHideFlags: 0
