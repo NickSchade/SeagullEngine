@@ -13,7 +13,3 @@ public class ExodusLocation : HomelandsLocation
     
 }
 
-public class ExodusLocationHabitability
-{
-
-}

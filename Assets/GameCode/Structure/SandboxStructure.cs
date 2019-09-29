@@ -4,7 +4,7 @@ using System.Collections;
 
 public class SandboxStructure : HomelandsStructure
 {
-    public SandboxStructure(HomelandsGame game, HomelandsLocation location) : base(game, location)
+    public SandboxStructure(HomelandsGame game, HomelandsLocation location, Player owner) : base(game, location, owner)
     {
     }
 }

@@ -28,7 +28,7 @@ public class Viewer
         _view = _views[_viewType];
     }
 
-    public LocationGraphicsData Draw(HomelandsLocation location, HomelandsPosStats stats)
+    public LocationGraphicsData Draw(HomelandsLocation location, Stats stats)
     {
         return _view.Draw(location, stats);
     }

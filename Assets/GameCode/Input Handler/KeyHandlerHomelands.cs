@@ -22,6 +22,15 @@ public class KeyHandlerHomelands : IKeyHandler
                 _game._viewer.ToggleNextView();
             }
         }
+        if (keys.ContainsKey(KeyCode.Alpha0))
+        {
+            KeyCodeInfo kci = keys[KeyCode.Alpha0];
+            Dictionary<eInput, bool> inputs = kci._keyCodeInfo;
+            if (inputs[eInput.Up])
+            {
+                Debug.Log("Current player is " + _game._playerSystem.GetPlayer()._name);
+            }
+        }
 
         return false;
     }
