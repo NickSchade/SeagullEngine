@@ -23,7 +23,7 @@ using System;
 
 public enum WaterBodyPrefence { None, Islands, Continent, Lakes, Coast };
 
-public class MapGen
+public class GaeaWorldbuilder
 {
     public Benchmark bench;
     public int xDim, yDim, iExpand;
@@ -38,7 +38,7 @@ public class MapGen
     WaterBodyPrefence prefWaterBody = WaterBodyPrefence.Continent;
 
     // Use this for initialization
-    public MapGen(int _xDim, int _yDim, int _iExpand = 1, float _percentSea = 0.5f, float _percentRiver = 0.01f)
+    public GaeaWorldbuilder(int _xDim, int _yDim, int _iExpand = 1, float _percentSea = 0.5f, float _percentRiver = 0.01f)
     {
         xDim = _xDim;
         yDim = _yDim;
@@ -48,7 +48,12 @@ public class MapGen
         iceLevel = 0.3f;
         percentRiver = _percentRiver;
         percentSea = _percentSea;
+        initializeArrays();
 
+    }
+
+    void initializeArrays()
+    {
         Elevation = new float[xDim, yDim];
         WaterFlux = new float[xDim, yDim];
         Rain = new float[xDim, yDim];
@@ -58,6 +63,7 @@ public class MapGen
         Flatness = new float[xDim, yDim];
         Fertility = new float[xDim, yDim];
         Harbor = new float[xDim, yDim];
+
     }
 
     // GENERATION
@@ -772,7 +778,7 @@ public class MapScaler
     public MapScaler()
     {
     }
-    public Dictionary<string, float[,]> BuildSurfaces(MapGen mg)
+    public Dictionary<string, float[,]> BuildSurfaces(GaeaWorldbuilder mg)
     {
         Dictionary<string, float[,]> surfaces = new Dictionary<string, float[,]> {
             { "Elevation", mg.Elevation },
@@ -786,9 +792,9 @@ public class MapScaler
                     };
         return surfaces;
     }
-    public void Crop(ref MapGen inputMap, int xDim, int yDim, int xTL, int yTL, bool bNormalize = false)
+    public void Crop(ref GaeaWorldbuilder inputMap, int xDim, int yDim, int xTL, int yTL, bool bNormalize = false)
     {
-        MapGen outputMap = new MapGen(xDim, yDim);
+        GaeaWorldbuilder outputMap = new GaeaWorldbuilder(xDim, yDim);
         outputMap.seaLevel = inputMap.seaLevel;
         outputMap.riverLevel = inputMap.riverLevel;
         Dictionary<string, float[,]> inputSurfaces = BuildSurfaces(inputMap);
@@ -811,13 +817,13 @@ public class MapScaler
         }
         inputMap = outputMap;
     }
-    public void ExpandSquare(ref MapGen inputMap, int xE, int yE, bool bNormalize = true)
+    public void ExpandSquare(ref GaeaWorldbuilder inputMap, int xE, int yE, bool bNormalize = true)
     {
         int xDim = inputMap.Elevation.GetLength(0);
         int yDim = inputMap.Elevation.GetLength(1);
         int xl = xDim * xE;
         int yl = yDim * yE;
-        MapGen outputMap = new MapGen(xl, yl);
+        GaeaWorldbuilder outputMap = new GaeaWorldbuilder(xl, yl);
         outputMap.seaLevel = inputMap.seaLevel;
         outputMap.riverLevel = inputMap.riverLevel;
 
@@ -853,11 +859,11 @@ public class MapScaler
         }
         inputMap = outputMap;
     }
-    public void Smooth(ref MapGen inputMap, bool bNormalize = true)
+    public void Smooth(ref GaeaWorldbuilder inputMap, bool bNormalize = true)
     {
         int xDim = inputMap.Elevation.GetLength(0);
         int yDim = inputMap.Elevation.GetLength(1);
-        MapGen outputMap = new MapGen(xDim, yDim);
+        GaeaWorldbuilder outputMap = new GaeaWorldbuilder(xDim, yDim);
         outputMap.seaLevel = inputMap.seaLevel;
         outputMap.riverLevel = inputMap.riverLevel;
 
@@ -880,7 +886,7 @@ public class MapScaler
         }
         inputMap = outputMap;
     }
-    private void Normalize(ref MapGen inputMap, Dictionary<string, float[,]> inputSurfaces)
+    private void Normalize(ref GaeaWorldbuilder inputMap, Dictionary<string, float[,]> inputSurfaces)
     {
         foreach (KeyValuePair<string, float[,]> kvp in inputSurfaces)
         {

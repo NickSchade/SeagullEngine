@@ -11,7 +11,7 @@ public class ViewGod : View
 
     public override LocationGraphicsData Draw(HomelandsLocation location, Stats stats)
     {
-        Color c = GetColorFromTerrain(location._terrain);
+        Color c = GetColorFromTerrain(location._terrain._type);
 
         return new LocationGraphicsData(c);
     }

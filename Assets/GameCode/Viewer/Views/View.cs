@@ -24,7 +24,7 @@ public abstract class View
         }
         else if (terrain == eTerrain.Mountain)
         {
-            c = Color.yellow;
+            c = Color.white;
         }
         else if (terrain == eTerrain.Sea)
         {
@@ -39,14 +39,14 @@ public abstract class View
     protected Color GetFogOfWarColor(HomelandsLocation location, Stats stats)
     {
         Color c = Color.magenta;
-        eVisibility visibility = stats._vision._visibility;
+        eVisibility visibility = stats._vision._visibility[_game._playerSystem.GetPlayer()];
         if (visibility == eVisibility.Visible)
         {
-            c = GetColorFromTerrain(location._terrain);
+            c = GetColorFromTerrain(location._terrain._type);
         }
         else if (visibility == eVisibility.Fog)
         {
-            c = Color.Lerp(GetColorFromTerrain(location._terrain), Color.black, 0.5f);
+            c = Color.Lerp(GetColorFromTerrain(location._terrain._type), Color.black, 0.5f);
         }
         else if (visibility == eVisibility.Unexplored)
         {

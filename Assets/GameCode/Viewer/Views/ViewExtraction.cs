@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ViewExtraction : View
 {
@@ -10,7 +11,8 @@ public class ViewExtraction : View
     public override LocationGraphicsData Draw(HomelandsLocation location, Stats stats)
     {
         Color c = GetFogOfWarColor(location, stats);
-        float extraction = stats._extraction._extractionRate;
+        Dictionary<Player,float> extractions = stats._extraction._extractionRate;
+        float extraction = extractions[_game._playerSystem.GetPlayer()];
         if (extraction > 0f)
         {
             c = Color.Lerp(Color.white, Color.black, extraction / 5f);

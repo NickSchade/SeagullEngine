@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 
 public struct StatsExtraction
 {
-    public float _extractionRate; // replace with HomelandsExtractionRate object or even D<eResource,HomelandsExtractionRate> after those become things
-    public StatsExtraction(float extractionRate)
+    public Dictionary<Player, float> _extractionRate;
+    public StatsExtraction(Dictionary<Player, float> extractionRate)
     {
         _extractionRate = extractionRate;
     }

@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 
 public struct StatsMilitary
 {
-    public float _attack; // replace with D<Structure,Attack> or something
-    public StatsMilitary(float attack)
+    public Dictionary<Player, float> _attack;
+    public StatsMilitary(Dictionary<Player, float> attack)
     {
         _attack = attack;
     }

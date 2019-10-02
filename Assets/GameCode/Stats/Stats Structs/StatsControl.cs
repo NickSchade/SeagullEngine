@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public struct StatsControl
 {
-    public List<Player> _controllingPlayers;
-    public StatsControl(List<Player> controllingPlayers)
+    public Dictionary<Player, bool> _controllingPlayers;
+    public StatsControl(Dictionary<Player, bool> controllingPlayers)
     {
         _controllingPlayers = controllingPlayers;
     }

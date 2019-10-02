@@ -8,8 +8,9 @@ public abstract class HomelandsLocation
     public HomelandsGame _game { get; }
 
     public HomelandsStructure _structure { get; set; }
+    public HomelandsResource _resource { get; set; }
+    public HomelandsTerrain _terrain { get; set; }
     public Viewer _viewer { get; set; }
-    public eTerrain _terrain;
     public Stats _stats;
 
 
@@ -19,9 +20,28 @@ public abstract class HomelandsLocation
         _game = game;
         _viewer = game._viewer;
 
-        _terrain = GetTerrainFromQualities(locationQualities);
+        _terrain = GetTerrain(locationQualities);
+        _resource = GetResource();
+
     }
-    eTerrain GetTerrainFromQualities(Dictionary<string, float> locationQualities)
+    HomelandsResource GetResource()
+    {
+        if (_terrain._type == eTerrain.Land && Random.Range(0f, 1f) > 0.90f)
+        {
+            return new HomelandsResource();
+        }
+        else
+        {
+            return null;
+        }
+    }
+    HomelandsTerrain GetTerrain(Dictionary<string, float> locationQualities)
+    {
+        eTerrain type = GetTerrainTypeFromQualities(locationQualities);
+        HomelandsTerrain terrain = new HomelandsTerrain(type);
+        return terrain;
+    }
+    eTerrain GetTerrainTypeFromQualities(Dictionary<string, float> locationQualities)
     {
         float elevation = locationQualities["Elevation"];
         if (elevation < 0.4)
@@ -40,23 +60,34 @@ public abstract class HomelandsLocation
 
     public virtual void TryToMakeStructure()
     {
+        float structureCost = 1f;
+        Player currentPlayer = _game._playerSystem.GetPlayer();
+
         if (_structure == null)
         {
-            if (_terrain == eTerrain.Land)
+            if (_terrain._type == eTerrain.Land)
             {
-                Player currentPlayer = _game._playerSystem.GetPlayer();
-                if (_game._stats._numberOfStructures == 0 || _stats._control._controllingPlayers.Contains(currentPlayer))
+                if (_game._stats._numberOfStructures[currentPlayer] <= 0 || _stats._control._controllingPlayers[currentPlayer])
                 {
-                    _structure = StructureFactory.Make(_game, this, currentPlayer);
+                    if (currentPlayer._resources.CanPay(structureCost))
+                    {
+                        currentPlayer._resources.Pay(structureCost);
+                        _structure = StructureFactory.Make(_game, this, currentPlayer);
+                        Debug.Log($"{currentPlayer._name} paid {structureCost} to build a structure");
+                    }
+                    else
+                    {
+                        Debug.Log($"{currentPlayer._name} can't Build - Insufficient Resources");
+                    }
                 }
                 else
                 {
-                    Debug.Log("Can't Build - Not Controlled");
+                    Debug.Log($"{currentPlayer._name} can't Build - Not Controlled");
                 }
             }
             else
             {
-                Debug.Log("Can't Build - Unbuildable");
+                Debug.Log($"{currentPlayer._name} can't Build - Unbuildable");
             }
             
         }
@@ -72,28 +103,30 @@ public abstract class HomelandsLocation
 
     public virtual GraphicsData Draw()
     {
-        LocationGraphicsData lgd = GetLocationData(_stats);
-        StructureGraphicsData sgd = GetStructureData(_stats);
+        LocationGraphicsData lgd = _viewer.Draw(this, _stats);
+        StructureGraphicsData sgd = null;
+        ResourceGraphicsData rgd = null;
 
-        GraphicsData gd = new GraphicsData(_pos, lgd, sgd);
+        bool visibleToPlayer = _stats._vision._visibility[_game._playerSystem.GetPlayer()] == eVisibility.Visible;
+        bool visibleBecauseGodMode = _game._viewer._viewType == eView.God;
+
+        if (visibleToPlayer || visibleBecauseGodMode)
+        {
+            if (_structure != null)
+            {
+                sgd = _structure.Draw();
+            }
+            if (_resource != null)
+            {
+                rgd = _resource.Draw();
+            }
+        }
+
+        GraphicsData gd = new GraphicsData(_pos, lgd, sgd, rgd);
 
         return gd;
     }
-
-    StructureGraphicsData GetStructureData(Stats stats)
-    {
-        if (_structure == null)
-        {
-            return null;
-        }
-        else
-        {
-            return _structure.Draw();
-        }
-    }
-    LocationGraphicsData GetLocationData(Stats stats)
-    {
-        return _viewer.Draw(this, stats);
-    }
+    
+    
 }
 

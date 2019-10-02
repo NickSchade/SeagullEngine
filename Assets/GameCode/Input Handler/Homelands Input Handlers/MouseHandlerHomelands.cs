@@ -1,12 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
-
-public interface IMouseHandler
-{
-    bool HandleMouse(MouseHandlerInfo mouseHandlerInfo);
-}
 public class MouseHandlerHomelands : IMouseHandler
 {
     Dictionary<Pos, HomelandsLocation> _locations;
@@ -19,7 +13,18 @@ public class MouseHandlerHomelands : IMouseHandler
     {
         if (mhi._pos != null)
         {
-            _locations[mhi._pos].Click();
+            if (mhi._left[eInput.Up])
+            {
+                _locations[mhi._pos].Click();
+            }
+            if (mhi._right[eInput.Up])
+            {
+                //HomelandsStructure structure = _locations[mhi._pos]._structure;
+                //if (structure != null)
+                //{
+                //    structure.DestroyThis();
+                //}
+            }
             return true;
         }
         else

@@ -8,7 +8,9 @@ public abstract class HomelandsStructure
     public HomelandsLocation _location;
     public Player _owner;
     public Dictionary<eRadius, RadiusRange> _radii;
-    float cost = 1f;
+
+    float _cost = 1f;
+    float _hitPoints = 3f;
 
     public HomelandsStructure(HomelandsGame game, HomelandsLocation location, Player owner)
     {
@@ -22,14 +24,21 @@ public abstract class HomelandsStructure
         _radii[eRadius.Extraction] = new RadiusRange(ePath.NodeEuclidian, 2f);
         _radii[eRadius.Military] = new RadiusRange(ePath.NodeEuclidian, 1f);
     }
-
-    public void Click()
+    public void TakeDamage(float damageAmount)
     {
-        throw new System.NotImplementedException();
+        if (damageAmount >= _hitPoints)
+        {
+            DestroyThis();
+        }
+    }
+    public void DestroyThis()
+    {
+        Debug.Log("Destroyed This Structure");
+        _location._structure = null;
     }
     public StructureGraphicsData Draw()
     {
-        return new StructureGraphicsData(Color.white);
+        return new StructureGraphicsData(_owner._color);
     }
     public List<HomelandsLocation> GetLocationsInRadius(eRadius radiusType)
     {

@@ -19,5 +19,9 @@ public class PlayerResources
     public void Gain(float income)
     {
         _resource += income;
+        if (income > 0f)
+        {
+            Debug.Log("gained money; player has"+_resource);
+        }
     }
 }

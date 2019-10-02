@@ -48,7 +48,7 @@ public class NeighborBuilderHex : NeighborBuilder
             if (mapInfo.pathMap.ContainsKey(l2.key()))
             {
                 Pos potentialNeighbor = mapInfo.pathMap[l2.key()];
-                if (mapInfo.locations[p]._terrain == mapInfo.locations[potentialNeighbor]._terrain)
+                if (mapInfo.locations[p]._terrain._type == mapInfo.locations[potentialNeighbor]._terrain._type)
                 {
                     p.neighbors.Add(potentialNeighbor);
                 }

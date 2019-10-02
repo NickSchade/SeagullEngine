@@ -51,39 +51,67 @@ public class GraphicsManager : MonoBehaviour
         go.GetComponentInChildren<Renderer>().material.color = c;
     }
 
+    void DrawLocations(GraphicsData gd)
+    {
+        Pos pos = gd._pos;
+        if (!_locations.ContainsKey(pos))
+        {
+            GameObject newGo = InstantiateGo(_prefabLocation, pos, gd._location.GetColor());
+            _locations[pos] = newGo;
+        }
+        SetColor(_locations[pos], gd._location.GetColor());
+    }
+    void DrawStructures(GraphicsData gd)
+    {
+        Pos pos = gd._pos;
+        if (gd._structure != null)
+        {
+            if (!_structures.ContainsKey(pos))
+            {
+                GameObject newGo = InstantiateGo(_prefabStructure, pos, gd._structure.GetColor());
+                _structures[pos] = newGo;
+            }
+            SetColor(_structures[pos], gd._structure.GetColor());
+        }
+        else
+        {
+            if (_structures.ContainsKey(pos))
+            {
+                Destroy(_structures[pos]);
+                _structures.Remove(pos);
+            }
+        }
+    }
+    void DrawResources(GraphicsData gd)
+    {
+        Pos pos = gd._pos;
+        if (gd._resource != null)
+        {
+            if (!_resources.ContainsKey(pos))
+            {
+                GameObject newGo = InstantiateGo(_prefabResource, pos, gd._resource.GetColor());
+                _resources[pos] = newGo;
+            }
+            SetColor(_resources[pos], gd._resource.GetColor());
+        }
+        else
+        {
+            if (_resources.ContainsKey(pos))
+            {
+                Destroy(_resources[pos]);
+                _resources.Remove(pos);
+            }
+        }
+    }
+
     public void Draw(List<GraphicsData> graphicsData)
     {
         foreach (GraphicsData gd in graphicsData)
         {
             Pos pos = gd._pos;
-            // LOCATION
-            if (!_locations.ContainsKey(pos))
-            {
-                GameObject newGo = InstantiateGo(_prefabLocation, pos, gd._location.GetColor());
-                _locations[pos] = newGo;
-            }
-            SetColor(_locations[pos], gd._location.GetColor());
-            // STRUCTURE
-            if (gd._structure != null)
-            {
-                if (!_structures.ContainsKey(pos))
-                {
-                    GameObject newGo = InstantiateGo(_prefabStructure, pos, gd._structure.GetColor());
-                    _structures[pos] = newGo;
-                }
-                SetColor(_structures[pos], gd._structure.GetColor());
-            }
-            // RESOURCE
-            if (gd._resource != null)
-            {
-                if (!_resources.ContainsKey(pos))
-                {
-                    GameObject newGo = InstantiateGo(_prefabResource, pos, gd._resource.GetColor());
-                    _resources[pos] = newGo;
-                }
-                SetColor(_resources[pos], gd._resource.GetColor());
-            }
-
+            DrawLocations(gd);
+            DrawStructures(gd);
+            DrawResources(gd);
         }
     }
 }
