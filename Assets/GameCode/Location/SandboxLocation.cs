@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class SandboxLocation : HomelandsLocation
 {
-    public SandboxLocation(HomelandsGame game, Pos pos, Dictionary<string,float> locationQualities) : base (game, pos, locationQualities)
+    public SandboxLocation(HomelandsGame game, Pos pos, HomelandsTerrain terrain, HomelandsResource resource) : base (game, pos, terrain, resource)
     {
 
     }

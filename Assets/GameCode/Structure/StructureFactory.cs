@@ -5,16 +5,16 @@ using UnityEngine;
 
 public static class StructureFactory
 {
-    public static HomelandsStructure Make(HomelandsGame game, HomelandsLocation location, Player owner)
+    public static HomelandsStructure Make(HomelandsGame game, StructurePlacementData data)
     {
         Debug.Log($@"Created Structure({game._gameType})");
         if (game._gameType == eGame.Exodus)
         {
-            return new ExodusStructure(game, location, owner);
+            return new ExodusStructure(game, data);
         }
         else if (game._gameType == eGame.Sandbox)
         {
-            return new SandboxStructure(game, location, owner);
+            return new SandboxStructure(game, data);
         }
         else
         {

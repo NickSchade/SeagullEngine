@@ -6,12 +6,15 @@ public class GameManager : MonoBehaviour
 {
     // GRAPHICS
     public GraphicsManager _graphicsManager;
+    // HACKY PLAYER DEMO UI
+    public UiPlayerDemoManager _playerDemoManager;
     // INPUT
     public InputManager _inputManager;
     // GAME
     public eGame _gameType;
     public eMap _mapType;
     public eTileShape _tileShape;
+    public int _numberOfPlayers;
     public HomelandsGame _game;
     
     
@@ -20,8 +23,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         _game = GameFactory.Make(this);
-        _inputManager.Initialize(this, _game._keyHandler, _game._mouseHandler);
-        
+        _inputManager.Initialize(this, _game._inputHandler);
+        _playerDemoManager.Initialize(_game);
     }
 
     // Update is called once per frame
@@ -31,6 +34,7 @@ public class GameManager : MonoBehaviour
         HandleCamera(inputHandlerInfo);
         TickInfo tick = _game.TakeTick(inputHandlerInfo);
         _graphicsManager.Draw(tick._graphicsData);
+        _playerDemoManager.Draw();
     }
 
     void HandleCamera(InputHandlerInfo ihi)

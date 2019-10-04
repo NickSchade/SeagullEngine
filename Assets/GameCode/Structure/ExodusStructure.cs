@@ -6,7 +6,7 @@ public class ExodusStructure : HomelandsStructure
 {
     public List<ExodusStructureAbility> _abilities;
 
-    public ExodusStructure(HomelandsGame game, HomelandsLocation location, Player owner) : base(game, location, owner)
+    public ExodusStructure(HomelandsGame game, StructurePlacementData data) : base(game, data)
     {
     }
 }

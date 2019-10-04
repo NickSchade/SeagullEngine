@@ -14,26 +14,19 @@ public abstract class HomelandsLocation
     public Stats _stats;
 
 
-    public HomelandsLocation(HomelandsGame game, Pos pos, Dictionary<string, float> locationQualities)
+    public HomelandsLocation(HomelandsGame game, Pos pos, HomelandsTerrain terrain, HomelandsResource resource)
     {
         _pos = pos;
         _game = game;
         _viewer = game._viewer;
 
-        _terrain = GetTerrain(locationQualities);
-        _resource = GetResource();
+        _terrain = terrain;
+        _resource = resource;
 
     }
     HomelandsResource GetResource()
     {
-        if (_terrain._type == eTerrain.Land && Random.Range(0f, 1f) > 0.90f)
-        {
-            return new HomelandsResource();
-        }
-        else
-        {
-            return null;
-        }
+        return _terrain._type == eTerrain.Land && Random.Range(0f, 1f) > 0.90f ? new HomelandsResource() : null;
     }
     HomelandsTerrain GetTerrain(Dictionary<string, float> locationQualities)
     {
@@ -58,9 +51,22 @@ public abstract class HomelandsLocation
         }
     }
 
-    public virtual void TryToMakeStructure()
+    StructureData GetBasicStructure()
     {
-        float structureCost = 1f;
+        Dictionary<eRadius, RadiusRange> radii = new Dictionary<eRadius, RadiusRange>();
+        radii[eRadius.Vision] = new RadiusRange(ePath.Euclidian, 5f);
+        radii[eRadius.Control] = new RadiusRange(ePath.NodeEuclidian, 3f);
+        radii[eRadius.Extraction] = new RadiusRange(ePath.NodeEuclidian, 2f);
+        radii[eRadius.Military] = new RadiusRange(ePath.NodeEuclidian, 1f);
+        StructureData sd = new StructureData(1f, 3f, radii);
+        return sd;
+    }
+    
+
+    public virtual StructurePlacementData TryToMakeStructure()
+    {
+        StructureData structureToBuild = GetBasicStructure();
+        StructurePlacementData sd = null;
         Player currentPlayer = _game._playerSystem.GetPlayer();
 
         if (_structure == null)
@@ -69,16 +75,9 @@ public abstract class HomelandsLocation
             {
                 if (_game._stats._numberOfStructures[currentPlayer] <= 0 || _stats._control._controllingPlayers[currentPlayer])
                 {
-                    if (currentPlayer._resources.CanPay(structureCost))
-                    {
-                        currentPlayer._resources.Pay(structureCost);
-                        _structure = StructureFactory.Make(_game, this, currentPlayer);
-                        Debug.Log($"{currentPlayer._name} paid {structureCost} to build a structure");
-                    }
-                    else
-                    {
-                        Debug.Log($"{currentPlayer._name} can't Build - Insufficient Resources");
-                    }
+                    sd = currentPlayer._buildQueue.GetStructureToPlace(structureToBuild, this);
+                    currentPlayer._buildQueue.AddStructureToBuildQueue(sd);
+                    Debug.Log($"{currentPlayer._name} added a structure to the build queue");
                 }
                 else
                 {
@@ -95,10 +94,12 @@ public abstract class HomelandsLocation
         {
             Debug.Log("Can't Build - Occupied");
         }
+        return sd;
     }
-    public virtual void Click()
+    public virtual StructurePlacementData Click()
     {
-        TryToMakeStructure();
+        StructurePlacementData sd = TryToMakeStructure();
+        return sd;
     }
 
     public virtual GraphicsData Draw()
@@ -107,7 +108,9 @@ public abstract class HomelandsLocation
         StructureGraphicsData sgd = null;
         ResourceGraphicsData rgd = null;
 
-        bool visibleToPlayer = _stats._vision._visibility[_game._playerSystem.GetPlayer()] == eVisibility.Visible;
+        Player currentPlayer = _game._playerSystem.GetPlayer();
+
+        bool visibleToPlayer = _stats._vision._visibility[currentPlayer] == eVisibility.Visible;
         bool visibleBecauseGodMode = _game._viewer._viewType == eView.God;
 
         if (visibleToPlayer || visibleBecauseGodMode)
@@ -115,6 +118,10 @@ public abstract class HomelandsLocation
             if (_structure != null)
             {
                 sgd = _structure.Draw();
+            }
+            if (_stats._build._buildingsQueued[currentPlayer] != null)
+            {
+                sgd = new StructureGraphicsData(Color.white);
             }
             if (_resource != null)
             {

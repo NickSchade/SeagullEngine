@@ -67,7 +67,7 @@ public class KeyHandlerHomelands : IKeyHandler
             Dictionary<eInput, bool> inputs = kci._keyCodeInfo;
             if (inputs[eInput.Up])
             {
-                Debug.Log("Ending turn doesn't do anything yet");
+                _game.EndTurn();
                 endedTurn = true;
             }
         }

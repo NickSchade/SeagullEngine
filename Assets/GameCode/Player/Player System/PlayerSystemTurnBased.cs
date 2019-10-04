@@ -14,27 +14,42 @@ public class PlayerSystemTurnBased : IPlayerSystem
     int _index;
     
 
-    public PlayerSystemTurnBased(HomelandsGame game)
+    public PlayerSystemTurnBased(HomelandsGame game, int numPlayers)
     {
         _game = game;
         _players = new List<Player>();
-        AddPlayer();
+        AddPlayers(numPlayers);
         _index = 0;
         _currentPlayer = _players[_index];
 
 
     }
 
-    public void AddPlayer()
+    PlayerDemographics GetStartingPlayer()
     {
-        List<string> playerNames = new List<string> { "P1", "P2" };
-        List<Color> playerColors = new List<Color> { Color.red, Color.blue };
+
+        List<string> playerNames = new List<string> { "P1", "P2", "P3" };
+        List<Color> playerColors = new List<Color> { Color.red, Color.blue, Color.cyan };
         int playerNumber = _players.Count;
         string name = playerNames[playerNumber];
         Color color = playerColors[playerNumber];
-        Player newPlayer = new Player(name, color);
+        PlayerDemographics demo = new PlayerDemographics(name, color, 3f);
+        return demo;
+    }
+    void AddPlayers(int numPlayers)
+    {
+        for (int i = 0; i < numPlayers; i++)
+        {
+            AddPlayer();
+        }
+    }
+
+    public void AddPlayer()
+    {
+        PlayerDemographics demo = GetStartingPlayer();
+        Player newPlayer = new Player(_game, demo);
         _players.Add(newPlayer);
-        Debug.Log($@"Added player named {name} with color {color.ToString()}");
+        Debug.Log($@"Added player named {demo.name} with color {demo.color.ToString()}");
     }
 
     public void ChangePlayer()

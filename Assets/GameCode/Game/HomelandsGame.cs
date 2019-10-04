@@ -11,10 +11,11 @@ public abstract partial class HomelandsGame
     public eGame _gameType { get; set; }
     public eMap _mapType { get; set; }
     public eTileShape _tileShape { get; set; }
+    public int _numberOfPlayers { get; set; }
 
     public IPlayerSystem _playerSystem { get; set; }
-    public IKeyHandler _keyHandler { get; set; }
-    public IMouseHandler _mouseHandler { get; set; }
+
+    public IInputHandler _inputHandler { get; set; }
 
     public Dictionary<Pos, HomelandsLocation> _locations;
     public Viewer _viewer;
@@ -32,16 +33,18 @@ public abstract partial class HomelandsGame
         _tileShape = gameManager._tileShape;
         _gameType = gameManager._gameType;
         _mapType = gameManager._mapType;
+        _numberOfPlayers = gameManager._numberOfPlayers;
 
+        _tickSystem = TickSystemFactory.Make(eTickSystem.SemiRealTime, this);
         _statsBuilder = new StatsBuilderBasic(this);
         _viewer = new Viewer(this);
         IMapBuilder mapBuilder = MapBuilderFactory.Make(_mapType, this);
-        _locations = mapBuilder.Make();
-        _mouseHandler = new MouseHandlerHomelands(_locations);
-        _keyHandler = new KeyHandlerHomelands(this);
-        
-        _playerSystem = PlayerSystemFactory.Make(ePlayerSystem.TurnBased, this);
-        _playerSystem.AddPlayer();
+        MapSettings settings = new MapSettings(_tileShape, 19, 19, false, false);
+        _locations = mapBuilder.Make(settings);
+        _inputHandler = new InputHandler(this);
+
+        _playerSystem = PlayerSystemFactory.Make(ePlayerSystem.TurnBased, this, _numberOfPlayers);
+        //_playerSystem.AddPlayer();
     }
 
     public virtual TickInfo TakeTick(InputHandlerInfo inputHandlerInfo)
@@ -50,14 +53,13 @@ public abstract partial class HomelandsGame
         UpdateGame();
 
         // RESOLVE INPUT IN GAME
-        bool mouseHandle = _mouseHandler.HandleMouse(inputHandlerInfo._mouseHandlerInfo);
-        bool keyHandle = _keyHandler.HandleKeys(inputHandlerInfo._keyHandlerInfo);
+        HomelandsTurnData turnData = _inputHandler.HandleInput(inputHandlerInfo);
 
         // DRAW GAME
         List<GraphicsData> graphicsToDraw = Draw();
 
         // OUTPUT TURN INFO
-        TickInfo tickInfo = new TickInfo(graphicsToDraw);
+        TickInfo tickInfo = _tickSystem.GetTick(graphicsToDraw);
         return tickInfo;
     }
 
@@ -65,32 +67,26 @@ public abstract partial class HomelandsGame
     {
         _stats = new GameStats(this);
         UpdateLocationStats();
-        //Extraction();
-        //War();
     }
 
-    void War()
+    public void EndTurn()
     {
-        foreach (HomelandsLocation location in _locations.Values)
+        Debug.Log("Ending Turn");
+        PerformExtraction();
+        PerformWar();
+        PerformBuild();
+    }
+
+    void PerformBuild()
+    {
+        List<Player> players = _playerSystem.GetPlayers();
+        foreach (Player player in players)
         {
-            HomelandsStructure structure = location._structure;
-            if (structure != null)
-            {
-                Player owner = structure._owner;
-                Dictionary<Player, float> attackValues = location._stats._military._attack;
-                foreach (Player player in attackValues.Keys)
-                {
-                    if (player != owner)
-                    {
-                        float attackAmount = attackValues[player];
-                        structure.TakeDamage(attackAmount);
-                    }
-                }
-            }
+            player._buildQueue.Build();
         }
     }
 
-    void Extraction()
+    void PerformExtraction()
     {
         Dictionary<Player, float> income = new Dictionary<Player, float>();
         List<Player> players = _playerSystem.GetPlayers();
@@ -112,6 +108,27 @@ public abstract partial class HomelandsGame
         foreach (Player p in players)
         {
             p._resources.Gain(income[p]);
+        }
+    }
+
+    void PerformWar()
+    {
+        foreach (HomelandsLocation location in _locations.Values)
+        {
+            HomelandsStructure structure = location._structure;
+            if (structure != null)
+            {
+                Player owner = structure._owner;
+                Dictionary<Player, float> attackValues = location._stats._military._attack;
+                foreach (Player player in attackValues.Keys)
+                {
+                    if (player != owner)
+                    {
+                        float attackAmount = attackValues[player];
+                        structure.TakeDamage(attackAmount);
+                    }
+                }
+            }
         }
     }
 

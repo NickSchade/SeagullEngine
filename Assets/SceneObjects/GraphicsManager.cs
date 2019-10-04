@@ -48,7 +48,7 @@ public class GraphicsManager : MonoBehaviour
 
     void SetColor(GameObject go, Color c)
     {
-        go.GetComponentInChildren<Renderer>().material.color = c;
+        go.GetComponentInChildren<MeshRenderer>().material.color = c;
     }
 
     void DrawLocations(GraphicsData gd)

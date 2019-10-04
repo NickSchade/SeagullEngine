@@ -3,14 +3,13 @@ using System.Collections;
 
 public class PlayerResources
 {
-    float _resource;
-    public PlayerResources(float startingResource)
+    Player _player;
+    public float _resource;
+
+    public PlayerResources(Player player, float startingResource)
     {
+        _player = player;
         _resource = startingResource;
-    }
-    public bool CanPay(float payAmount)
-    {
-        return payAmount <= _resource;
     }
     public void Pay(float payAmount)
     {
@@ -21,7 +20,7 @@ public class PlayerResources
         _resource += income;
         if (income > 0f)
         {
-            Debug.Log("gained money; player has"+_resource);
+            Debug.Log($@"{_player} gained {income} up to {_resource}");
         }
     }
 }

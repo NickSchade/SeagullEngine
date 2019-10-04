@@ -13,11 +13,10 @@ public class MapBuilderGaea : MapBuilderBase, IMapBuilder
         _game = game;
     }
 
-    public Dictionary<Pos, HomelandsLocation> Make()
+    public Dictionary<Pos, HomelandsLocation> Make(MapSettings settings)
     {
         Debug.Log("Making Map");
 
-        MapSettings settings = new MapSettings(_game._tileShape, 19, 19, false, false);
 
         GaeaWorldbuilder map = new GaeaWorldbuilder(settings.xDim, settings.yDim);
         map.GenerateMap();
@@ -43,12 +42,37 @@ public class MapBuilderGaea : MapBuilderBase, IMapBuilder
                 Loc l = new Loc(x, y);
                 Pos p = new Pos(l, mapLocSetter);
                 Dictionary<string, float> locationQualities = map.GetLocationQualities(x, y);
-                locations[p] = LocationFactory.Make(_game, p, locationQualities);
+                HomelandsTerrain terrain = GetTerrain(locationQualities);
+                HomelandsResource resource = terrain._type == eTerrain.Land && Random.Range(0f, 1f) > 0.90f ? new HomelandsResource() : null;
+                locations[p] = LocationFactory.Make(_game, p, terrain, resource);
             }
         }
         return locations;
     }
 
+    HomelandsTerrain GetTerrain(Dictionary<string, float> locationQualities)
+    {
+        eTerrain type = GetTerrainTypeFromQualities(locationQualities);
+        HomelandsTerrain terrain = new HomelandsTerrain(type);
+        return terrain;
+    }
 
-    
+    eTerrain GetTerrainTypeFromQualities(Dictionary<string, float> locationQualities)
+    {
+        float elevation = locationQualities["Elevation"];
+        if (elevation < 0.4)
+        {
+            return eTerrain.Sea;
+        }
+        else if (elevation < 0.8)
+        {
+            return eTerrain.Land;
+        }
+        else
+        {
+            return eTerrain.Mountain;
+        }
+    }
+
+
 }

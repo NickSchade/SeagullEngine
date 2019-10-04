@@ -6,7 +6,7 @@ public class ExodusLocation : HomelandsLocation
 {
     ExodusLocationHabitability _habitability;
 
-    public ExodusLocation(HomelandsGame game, Pos pos, Dictionary<string,float> locationQualities) : base(game, pos, locationQualities)
+    public ExodusLocation(HomelandsGame game, Pos pos, HomelandsTerrain terrain, HomelandsResource resource) : base(game, pos, terrain, resource)
     {
 
     }

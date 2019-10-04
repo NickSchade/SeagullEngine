@@ -12,6 +12,7 @@ public class StructureGraphicsData
     }
     public Color GetColor()
     {
-        return _color;
+        Color c = _color;
+        return c;
     }
 }

@@ -22,15 +22,17 @@ public class StatsBuilderBasic : IStatsBuilder
         List<Stats> views = new List<Stats>();
         Dictionary<Pos, StatsVision> vision = GetPosViewVision();
         Dictionary<Pos, StatsControl> control = GetPosViewControl();
+        Dictionary<Pos, StatsBuild> build = GetPosViewBuild();
         Dictionary<Pos, StatsExtraction> extraction = GetPosViewExtraction();
         Dictionary<Pos, StatsMilitary> military = GetPosViewMilitary();
         foreach (Pos p in _game._locations.Keys)
         {
             StatsVision v = vision.ContainsKey(p) ? vision[p] : new StatsVision(new Dictionary<Player, eVisibility>());
             StatsControl c = control.ContainsKey(p) ? control[p] : new StatsControl(new Dictionary<Player, bool>());
+            StatsBuild b = build.ContainsKey(p) ? build[p] : new StatsBuild(new Dictionary<Player, StructurePlacementData>());
             StatsExtraction e = extraction.ContainsKey(p) ? extraction[p] : new StatsExtraction(new Dictionary<Player, float>());
             StatsMilitary m = military.ContainsKey(p) ? military[p] : new StatsMilitary(new Dictionary<Player, float>());
-            Stats view = new Stats(p, v, c, e, m);
+            Stats view = new Stats(p, v, c, b, e, m);
             views.Add(view);
         }
         return views;
@@ -99,6 +101,27 @@ public class StatsBuilderBasic : IStatsBuilder
             controlStats[p] = new StatsControl(control[p]);
         }
         return controlStats;
+    }
+
+    
+    Dictionary<Pos, StatsBuild> GetPosViewBuild()
+    {
+        Dictionary<Pos, Dictionary<Player, StructurePlacementData>> buildRaw = new Dictionary<Pos, Dictionary<Player, StructurePlacementData>>();
+        List<Player> players = _game._playerSystem.GetPlayers();
+        foreach (Pos p in _game._locations.Keys)
+        {
+            buildRaw[p] = new Dictionary<Player, StructurePlacementData>();
+            foreach (Player player in players)
+            {
+                buildRaw[p][player] = player._buildQueue.GetStructureInQueueAtPos(p);
+            }
+        }
+        Dictionary<Pos, StatsBuild> build = new Dictionary<Pos, StatsBuild>();
+        foreach (Pos p in buildRaw.Keys)
+        {
+            build[p] = new StatsBuild(buildRaw[p]);
+        }
+        return build;
     }
     Dictionary<Pos, StatsExtraction> GetPosViewExtraction()
     {

@@ -9,20 +9,18 @@ public abstract class HomelandsStructure
     public Player _owner;
     public Dictionary<eRadius, RadiusRange> _radii;
 
-    float _cost = 1f;
-    float _hitPoints = 3f;
-
-    public HomelandsStructure(HomelandsGame game, HomelandsLocation location, Player owner)
+    float _cost;
+    float _hitPoints;
+    
+    public HomelandsStructure(HomelandsGame game, StructurePlacementData placementData)
     {
         _game = game;
-        _location = location;
-        _owner = owner;
+        _location = placementData.location;
+        _owner = placementData.creator;
 
-        _radii = new Dictionary<eRadius, RadiusRange>();
-        _radii[eRadius.Vision] = new RadiusRange(ePath.Euclidian, 5f);
-        _radii[eRadius.Control] = new RadiusRange(ePath.NodeEuclidian, 3f);
-        _radii[eRadius.Extraction] = new RadiusRange(ePath.NodeEuclidian, 2f);
-        _radii[eRadius.Military] = new RadiusRange(ePath.NodeEuclidian, 1f);
+        _cost = placementData.data.cost;
+        _hitPoints = placementData.data.hitPoints;
+        _radii = placementData.data.radii;
     }
     public void TakeDamage(float damageAmount)
     {

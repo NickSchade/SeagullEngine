@@ -14,11 +14,11 @@ public interface IPlayerSystem
 
 public static class PlayerSystemFactory
 {
-    public static IPlayerSystem Make(ePlayerSystem type, HomelandsGame game)
+    public static IPlayerSystem Make(ePlayerSystem type, HomelandsGame game, int numPlayers)
     {
         if (type == ePlayerSystem.TurnBased)
         {
-            return new PlayerSystemTurnBased(game);
+            return new PlayerSystemTurnBased(game, numPlayers);
         }
         else
         {

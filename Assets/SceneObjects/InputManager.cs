@@ -11,11 +11,11 @@ public class InputManager : MonoBehaviour
     private IKeyHandler _keyHandler;
     private IMouseHandler _mouseHandler;
     
-    public void Initialize(GameManager gameManager, IKeyHandler keyHandler, IMouseHandler mouseHandler)
+    public void Initialize(GameManager gameManager, IInputHandler inputHandler)
     {
         _gameManager = gameManager;
-        _keyHandler = keyHandler;
-        _mouseHandler = mouseHandler;
+        _keyHandler = inputHandler._keyHandler;
+        _mouseHandler = inputHandler._mouseHandler;
     }
 
     public InputHandlerInfo GetInput()
