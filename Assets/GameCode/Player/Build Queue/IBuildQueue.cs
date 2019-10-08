@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 
 
-public enum eBuildQueue { DynamicOld, StaticOld, Better };
+public enum eBuildQueue { DynamicOld, StaticOld, Brute, Elegant };
 
 public interface IBuildQueue
 {
     void Build();
     bool TryToAddStructureToBuildQueue(dStructurePlacement data);
     dStructurePlacement GetStructureInQueueAtPos(Pos p);
+    List<BuildQueueSet> GetBuildQueue();
 }
 
 public static class BuildQueueFactory
@@ -23,9 +24,13 @@ public static class BuildQueueFactory
         {
             return new BuildQueueDynamicOld(player);
         }
-        else if (type == eBuildQueue.Better)
+        else if (type == eBuildQueue.Brute)
         {
-            return new BuildQueue(player);
+            return new BuildQueueBrute(player);
+        }
+        else if (type == eBuildQueue.Elegant)
+        {
+            return new BuildQueueElegant(player);
         }
         else
         {

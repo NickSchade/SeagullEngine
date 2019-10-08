@@ -5,6 +5,7 @@ public class BuildQueueDynamicOld : BuildQueueBaseOld, IBuildQueue
 {
     public BuildQueueDynamicOld(Player player) : base(player)
     {
+        _maxQueueSize = 1;
     }
 
     protected override void BuildQueue()

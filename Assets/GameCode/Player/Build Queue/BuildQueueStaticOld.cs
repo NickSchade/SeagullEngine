@@ -5,6 +5,7 @@ public class BuildQueueStaticOld : BuildQueueBaseOld, IBuildQueue
 {
     public BuildQueueStaticOld(Player player) : base(player)
     {
+        _maxQueueSize = 99;
     }
     
 

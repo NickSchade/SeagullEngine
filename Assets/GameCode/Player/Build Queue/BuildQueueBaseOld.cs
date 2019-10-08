@@ -6,13 +6,39 @@ public abstract class BuildQueueBaseOld : IBuildQueue
 {
     public Player _player;
     public List<dStructurePlacement> _queue;
+    public int _maxQueueSize;
 
     public BuildQueueBaseOld(Player player)
     {
         _player = player;
         ResetBuildQueue();
     }
-
+    
+    public virtual List<BuildQueueSet> GetBuildQueue()
+    {
+        List<BuildQueueSet> returnQueue = new List<BuildQueueSet>();
+        int index = 0;
+        BuildQueueSet bqs = new BuildQueueSet(_player, _maxQueueSize);
+        while (index < _queue.Count)
+        {
+            dStructurePlacement dsp = _queue[index];
+            if (!bqs.CanAddToSet(dsp))
+            {
+                returnQueue.Add(bqs);
+                bqs = new BuildQueueSet(_player, _maxQueueSize);
+            }
+            if (bqs.CanAddToSet(dsp))
+            {
+                bqs.AddToSet(dsp);
+            }
+            index++;
+        }
+        if (returnQueue[returnQueue.Count - 1] != bqs)
+        {
+            returnQueue.Add(bqs);
+        }
+        return returnQueue;
+    }
 
     public bool TryToAddStructureToBuildQueue(dStructurePlacement data)
     {
