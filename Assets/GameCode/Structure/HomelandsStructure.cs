@@ -12,7 +12,7 @@ public abstract class HomelandsStructure
     float _cost;
     float _hitPoints;
     
-    public HomelandsStructure(HomelandsGame game, StructurePlacementData placementData)
+    public HomelandsStructure(HomelandsGame game, dStructurePlacement placementData)
     {
         _game = game;
         _location = placementData.location;

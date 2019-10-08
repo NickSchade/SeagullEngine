@@ -23,4 +23,11 @@ public class PlayerResources
             Debug.Log($@"{_player} gained {income} up to {_resource}");
         }
     }
+    public bool CanAfford(float amount)
+    {
+        bool canAfford = amount <= _resource;
+        string can = canAfford ? "can" : "can't";
+        Debug.Log($@"{_player._name} {can} afford paying {amount} of {_resource}");
+        return canAfford;
+    }
 }

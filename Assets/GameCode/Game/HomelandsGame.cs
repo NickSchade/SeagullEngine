@@ -13,6 +13,11 @@ public abstract partial class HomelandsGame
     public eTileShape _tileShape { get; set; }
     public int _numberOfPlayers { get; set; }
 
+    public eBuildQueue _buildQueueType;
+
+
+
+
     public IPlayerSystem _playerSystem { get; set; }
 
     public IInputHandler _inputHandler { get; set; }
@@ -34,6 +39,7 @@ public abstract partial class HomelandsGame
         _gameType = gameManager._gameType;
         _mapType = gameManager._mapType;
         _numberOfPlayers = gameManager._numberOfPlayers;
+        _buildQueueType = gameManager._buildQueueType;
 
         _tickSystem = TickSystemFactory.Make(eTickSystem.SemiRealTime, this);
         _statsBuilder = new StatsBuilderBasic(this);

@@ -47,7 +47,7 @@ public class PlayerSystemTurnBased : IPlayerSystem
     public void AddPlayer()
     {
         PlayerDemographics demo = GetStartingPlayer();
-        Player newPlayer = new Player(_game, demo);
+        Player newPlayer = new Player(_game, demo, _game._buildQueueType);
         _players.Add(newPlayer);
         Debug.Log($@"Added player named {demo.name} with color {demo.color.ToString()}");
     }

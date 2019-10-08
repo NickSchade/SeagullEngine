@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class BuildQueueStatic : BuildQueueBase, IBuildQueue
+public class BuildQueueStaticOld : BuildQueueBaseOld, IBuildQueue
 {
-    public BuildQueueStatic(Player player) : base(player)
+    public BuildQueueStaticOld(Player player) : base(player)
     {
     }
     
 
-    protected override bool CanAffordToAddToQueue(StructurePlacementData data)
+    protected override bool CanAffordToAddToQueue(dStructurePlacement data)
     {
         return CanAffordEntireQueuePlusNewStructure(data);
     }

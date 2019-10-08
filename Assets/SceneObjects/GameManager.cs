@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public eGame _gameType;
     public eMap _mapType;
     public eTileShape _tileShape;
+    public eBuildQueue _buildQueueType;
     public int _numberOfPlayers;
     public HomelandsGame _game;
     

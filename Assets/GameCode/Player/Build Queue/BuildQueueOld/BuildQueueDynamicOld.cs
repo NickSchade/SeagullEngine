@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BuildQueueDynamic : BuildQueueBase, IBuildQueue
+public class BuildQueueDynamicOld : BuildQueueBaseOld, IBuildQueue
 {
-    public BuildQueueDynamic(Player player) : base(player)
+    public BuildQueueDynamicOld(Player player) : base(player)
     {
     }
 
@@ -12,7 +12,7 @@ public class BuildQueueDynamic : BuildQueueBase, IBuildQueue
         BuildNextInQueue();
     }
 
-    protected override bool CanAffordToAddToQueue(StructurePlacementData data)
+    protected override bool CanAffordToAddToQueue(dStructurePlacement data)
     {
         return CanAddToLimitlessQueue();
     }

@@ -8,14 +8,14 @@ public class Player
     public string _name;
     public Color _color;
     public PlayerResources _resources;
-    public BuildQueueStatic _buildQueue;
-    public Player(HomelandsGame game, PlayerDemographics demo)
+    public IBuildQueue _buildQueue;
+    public Player(HomelandsGame game, PlayerDemographics demo, eBuildQueue type)
     {
         _game = game;
         _name = demo.name;
         _color = demo.color;
         _resources = new PlayerResources(this, demo.resources);
-        _buildQueue = new BuildQueueStatic(this);
+        _buildQueue = BuildQueueFactory.Make(type, this);
     }
     public PlayerDemographics GetDemographics()
     {

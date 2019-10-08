@@ -2,25 +2,30 @@
 using System.Collections.Generic;
 
 
-public enum eBuildQueue { Static, Dynamic};
+public enum eBuildQueue { DynamicOld, StaticOld, Better };
 
 public interface IBuildQueue
 {
     void Build();
-    void AddStructureToBuildQueue(StructurePlacementData data);
+    bool TryToAddStructureToBuildQueue(dStructurePlacement data);
+    dStructurePlacement GetStructureInQueueAtPos(Pos p);
 }
 
 public static class BuildQueueFactory
 {
     public static IBuildQueue Make(eBuildQueue type, Player player)
     {
-        if (type == eBuildQueue.Static)
+        if (type == eBuildQueue.StaticOld)
         {
-            return new BuildQueueStatic(player);
+            return new BuildQueueStaticOld(player);
         }
-        else if (type == eBuildQueue.Dynamic)
+        else if (type == eBuildQueue.DynamicOld)
         {
-            throw new System.NotImplementedException();
+            return new BuildQueueDynamicOld(player);
+        }
+        else if (type == eBuildQueue.Better)
+        {
+            return new BuildQueue(player);
         }
         else
         {

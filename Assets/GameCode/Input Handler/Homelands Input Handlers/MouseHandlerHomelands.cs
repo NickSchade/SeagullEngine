@@ -9,18 +9,18 @@ public class MouseHandlerHomelands : IMouseHandler
     {
         _locations = locations;
     }
-    public StructurePlacementData HandleMouse(MouseHandlerInfo mhi)
+    public dStructurePlacement HandleMouse(MouseHandlerInfo mhi)
     {
-        StructurePlacementData builtBuilding = null;
+        dStructurePlacement builtBuilding = null;
         if (mhi._pos != null)
         {
             builtBuilding = HandleBuildStructure(mhi);
         }
         return builtBuilding;
     }
-    StructurePlacementData HandleBuildStructure(MouseHandlerInfo mhi)
+    dStructurePlacement HandleBuildStructure(MouseHandlerInfo mhi)
     {
-        StructurePlacementData structureToBuild = null;
+        dStructurePlacement structureToBuild = null;
         if (mhi._left[eInput.Up])
         {
             structureToBuild = _locations[mhi._pos].Click();

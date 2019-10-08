@@ -51,22 +51,21 @@ public abstract class HomelandsLocation
         }
     }
 
-    StructureData GetBasicStructure()
+    dStructure GetBasicStructure()
     {
         Dictionary<eRadius, RadiusRange> radii = new Dictionary<eRadius, RadiusRange>();
         radii[eRadius.Vision] = new RadiusRange(ePath.Euclidian, 5f);
         radii[eRadius.Control] = new RadiusRange(ePath.NodeEuclidian, 3f);
         radii[eRadius.Extraction] = new RadiusRange(ePath.NodeEuclidian, 2f);
         radii[eRadius.Military] = new RadiusRange(ePath.NodeEuclidian, 1f);
-        StructureData sd = new StructureData(1f, 3f, radii);
+        dStructure sd = new dStructure(1f, 3f, radii);
         return sd;
     }
     
 
-    public virtual StructurePlacementData TryToMakeStructure()
+    public virtual bool TryToMakeStructure(dStructure structureToBuild)
     {
-        StructureData structureToBuild = GetBasicStructure();
-        StructurePlacementData sd = null;
+        bool madeStructure = false;
         Player currentPlayer = _game._playerSystem.GetPlayer();
 
         if (_structure == null)
@@ -75,8 +74,8 @@ public abstract class HomelandsLocation
             {
                 if (_game._stats._numberOfStructures[currentPlayer] <= 0 || _stats._control._controllingPlayers[currentPlayer])
                 {
-                    sd = currentPlayer._buildQueue.GetStructureToPlace(structureToBuild, this);
-                    currentPlayer._buildQueue.AddStructureToBuildQueue(sd);
+                    dStructurePlacement potentialSd = new dStructurePlacement(structureToBuild, currentPlayer, this);
+                    madeStructure = currentPlayer._buildQueue.TryToAddStructureToBuildQueue(potentialSd);
                     Debug.Log($"{currentPlayer._name} added a structure to the build queue");
                 }
                 else
@@ -94,12 +93,22 @@ public abstract class HomelandsLocation
         {
             Debug.Log("Can't Build - Occupied");
         }
-        return sd;
+        return madeStructure;
     }
-    public virtual StructurePlacementData Click()
+    public virtual dStructurePlacement Click()
     {
-        StructurePlacementData sd = TryToMakeStructure();
-        return sd;
+        dStructure structureToBuild = GetBasicStructure();
+        Player currentPlayer = _game._playerSystem.GetPlayer();
+        dStructurePlacement spd = new dStructurePlacement(structureToBuild, currentPlayer, this);
+        bool placementSuccess = TryToMakeStructure(structureToBuild);
+        if (placementSuccess)
+        {
+            return spd;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public virtual GraphicsData Draw()
@@ -121,7 +130,7 @@ public abstract class HomelandsLocation
             }
             if (_stats._build._buildingsQueued[currentPlayer] != null)
             {
-                sgd = new StructureGraphicsData(Color.white);
+                sgd = new StructureGraphicsData(Color.black);
             }
             if (_resource != null)
             {

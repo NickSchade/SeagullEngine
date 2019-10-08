@@ -5,5 +5,5 @@ using System.Collections.Generic;
 
 public interface IMouseHandler
 {
-    StructurePlacementData HandleMouse(MouseHandlerInfo mouseHandlerInfo);
+    dStructurePlacement HandleMouse(MouseHandlerInfo mouseHandlerInfo);
 }

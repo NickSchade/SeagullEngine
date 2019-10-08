@@ -24,7 +24,7 @@ public class InputHandler :IInputHandler
 
     public HomelandsTurnData HandleInput(InputHandlerInfo inputHandlerInfo)
     {
-        StructurePlacementData structureToBuild = _mouseHandler.HandleMouse(inputHandlerInfo._mouseHandlerInfo);
+        dStructurePlacement structureToBuild = _mouseHandler.HandleMouse(inputHandlerInfo._mouseHandlerInfo);
         bool keyHandle = _keyHandler.HandleKeys(inputHandlerInfo._keyHandlerInfo);
 
         HomelandsTurnData htd = new HomelandsTurnData(structureToBuild);

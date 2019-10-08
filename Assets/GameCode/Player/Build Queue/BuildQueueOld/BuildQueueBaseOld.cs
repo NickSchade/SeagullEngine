@@ -2,32 +2,35 @@
 using System.Collections.Generic;
 
 
-public abstract class BuildQueueBase : IBuildQueue
+public abstract class BuildQueueBaseOld : IBuildQueue
 {
     public Player _player;
-    public List<StructurePlacementData> _queue;
+    public List<dStructurePlacement> _queue;
 
-    public BuildQueueBase(Player player)
+    public BuildQueueBaseOld(Player player)
     {
         _player = player;
         ResetBuildQueue();
     }
 
 
-    public void AddStructureToBuildQueue(StructurePlacementData data)
+    public bool TryToAddStructureToBuildQueue(dStructurePlacement data)
     {
+        bool success = false;
         if (data != null)
         {
             if (CanAffordToAddToQueue(data))
             {
                 _queue.Remove(GetStructureAlreadInQueue(data));
                 _queue.Add(data);
+                success = true;
             }
             else
             {
                 Debug.Log("can't afford to add to queue");
             }
         }
+        return success;
     }
     public void Build()
     {
@@ -46,18 +49,18 @@ public abstract class BuildQueueBase : IBuildQueue
     protected float GetTotalCost()
     {
         float cost = 0f;
-        foreach (StructurePlacementData data in _queue)
+        foreach (dStructurePlacement data in _queue)
         {
             cost += data.data.cost;
         }
         return cost;
     }
-    protected abstract bool CanAffordToAddToQueue(StructurePlacementData data);
-    protected bool CanAffordEntireQueuePlusNewStructure(StructurePlacementData data)
+    protected abstract bool CanAffordToAddToQueue(dStructurePlacement data);
+    public bool CanAffordEntireQueuePlusNewStructure(dStructurePlacement data)
     {
         float currentCost = GetTotalCost();
         float totalCost = currentCost + data.data.cost;
-        return CanAffordAmount(totalCost);
+        return _player._resources.CanAfford(totalCost);
     }
     protected bool CanAddToLimitlessQueue()
     {
@@ -67,29 +70,25 @@ public abstract class BuildQueueBase : IBuildQueue
     {
         if (_queue.Count > 0)
         {
-            StructurePlacementData spd = _queue[0];
-            return CanAffordAmount(spd.data.cost);
+            dStructurePlacement spd = _queue[0];
+            return _player._resources.CanAfford(spd.data.cost);
         }
         else
         {
             return true;
         }
     }
-    protected bool CanAffordAmount(float amount)
-    {
-        return amount <= _player._resources._resource;
-    }
     protected abstract bool CanAffordToBuildQueue();
     protected bool CanAffordEntireQueue()
     {
         float currentCost = GetTotalCost();
-        return CanAffordAmount(currentCost);
+        return _player._resources.CanAfford(currentCost); 
     }
 
-    protected StructurePlacementData GetStructureAlreadInQueue(StructurePlacementData data)
+    protected dStructurePlacement GetStructureAlreadInQueue(dStructurePlacement data)
     {
-        StructurePlacementData spd = null;
-        foreach (StructurePlacementData d in _queue)
+        dStructurePlacement spd = null;
+        foreach (dStructurePlacement d in _queue)
         {
             if (d.location == data.location)
             {
@@ -100,9 +99,9 @@ public abstract class BuildQueueBase : IBuildQueue
 
         return spd;
     }
-    public StructurePlacementData GetStructureToPlace(StructureData structureToBuild, HomelandsLocation buildLocation)
+    public dStructurePlacement GetStructureToPlace(dStructure structureToBuild, HomelandsLocation buildLocation)
     {
-        StructurePlacementData placementData = new StructurePlacementData(structureToBuild, _player, buildLocation);
+        dStructurePlacement placementData = new dStructurePlacement(structureToBuild, _player, buildLocation);
         if (CanAffordEntireQueuePlusNewStructure(placementData))
         {
             return placementData;
@@ -120,15 +119,15 @@ public abstract class BuildQueueBase : IBuildQueue
 
     protected void ResetBuildQueue()
     {
-        _queue = new List<StructurePlacementData>();
+        _queue = new List<dStructurePlacement>();
     }
 
     protected abstract void BuildQueue();
 
     protected void BuildEntireQueue()
     {
-        List<StructurePlacementData> dataInQueue = GetDataInQueue();
-        foreach (StructurePlacementData spd in dataInQueue)
+        List<dStructurePlacement> dataInQueue = GetDataInQueue();
+        foreach (dStructurePlacement spd in dataInQueue)
         {
             HomelandsStructure newStructure = StructureFactory.Make(spd.location._game, spd);
             spd.location._structure = newStructure;
@@ -142,22 +141,22 @@ public abstract class BuildQueueBase : IBuildQueue
     {
         if (_queue.Count > 0)
         {
-            StructurePlacementData spd = _queue[0];
+            dStructurePlacement spd = _queue[0];
             HomelandsStructure newStructure = StructureFactory.Make(spd.location._game, spd);
             spd.location._structure = newStructure;
             _player._resources.Pay(spd.data.cost);
             _queue.Remove(spd);
         }
     }
-    protected List<StructurePlacementData> GetDataInQueue()
+    protected List<dStructurePlacement> GetDataInQueue()
     {
         return _queue;
     }
-    public StructurePlacementData GetStructureInQueueAtPos(Pos p)
+    public dStructurePlacement GetStructureInQueueAtPos(Pos p)
     {
-        StructurePlacementData spd = null;
-        List<StructurePlacementData> q = GetDataInQueue();
-        foreach (StructurePlacementData d in q)
+        dStructurePlacement spd = null;
+        List<dStructurePlacement> q = GetDataInQueue();
+        foreach (dStructurePlacement d in q)
         {
             if (d.location == _player._game._locations[p])
             {

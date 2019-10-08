@@ -5,7 +5,7 @@ using UnityEngine;
 
 public static class StructureFactory
 {
-    public static HomelandsStructure Make(HomelandsGame game, StructurePlacementData data)
+    public static HomelandsStructure Make(HomelandsGame game, dStructurePlacement data)
     {
         Debug.Log($@"Created Structure({game._gameType})");
         if (game._gameType == eGame.Exodus)

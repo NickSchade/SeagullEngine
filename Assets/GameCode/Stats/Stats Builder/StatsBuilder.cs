@@ -29,7 +29,7 @@ public class StatsBuilderBasic : IStatsBuilder
         {
             StatsVision v = vision.ContainsKey(p) ? vision[p] : new StatsVision(new Dictionary<Player, eVisibility>());
             StatsControl c = control.ContainsKey(p) ? control[p] : new StatsControl(new Dictionary<Player, bool>());
-            StatsBuild b = build.ContainsKey(p) ? build[p] : new StatsBuild(new Dictionary<Player, StructurePlacementData>());
+            StatsBuild b = build.ContainsKey(p) ? build[p] : new StatsBuild(new Dictionary<Player, dStructurePlacement>());
             StatsExtraction e = extraction.ContainsKey(p) ? extraction[p] : new StatsExtraction(new Dictionary<Player, float>());
             StatsMilitary m = military.ContainsKey(p) ? military[p] : new StatsMilitary(new Dictionary<Player, float>());
             Stats view = new Stats(p, v, c, b, e, m);
@@ -106,11 +106,11 @@ public class StatsBuilderBasic : IStatsBuilder
     
     Dictionary<Pos, StatsBuild> GetPosViewBuild()
     {
-        Dictionary<Pos, Dictionary<Player, StructurePlacementData>> buildRaw = new Dictionary<Pos, Dictionary<Player, StructurePlacementData>>();
+        Dictionary<Pos, Dictionary<Player, dStructurePlacement>> buildRaw = new Dictionary<Pos, Dictionary<Player, dStructurePlacement>>();
         List<Player> players = _game._playerSystem.GetPlayers();
         foreach (Pos p in _game._locations.Keys)
         {
-            buildRaw[p] = new Dictionary<Player, StructurePlacementData>();
+            buildRaw[p] = new Dictionary<Player, dStructurePlacement>();
             foreach (Player player in players)
             {
                 buildRaw[p][player] = player._buildQueue.GetStructureInQueueAtPos(p);

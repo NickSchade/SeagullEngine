@@ -3,8 +3,8 @@ using System.Collections;
 
 public class HomelandsTurnData 
 {
-    StructurePlacementData _structureToBuild;
-    public HomelandsTurnData(StructurePlacementData structureToBuild)
+    dStructurePlacement _structureToBuild;
+    public HomelandsTurnData(dStructurePlacement structureToBuild)
     {
         _structureToBuild = structureToBuild;
     }
