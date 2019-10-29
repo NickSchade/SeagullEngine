@@ -1,18 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿using UnityEngine;
 
 public static class StructureFactory
 {
     public static HomelandsStructure Make(HomelandsGame game, dStructurePlacement data)
     {
-        Debug.Log($@"Created Structure({game._gameType})");
-        if (game._gameType == eGame.Exodus)
+        eGame gameType = game._settings._gameType;
+        Debug.Log($@"Created Structure({gameType})");
+
+        if (gameType == eGame.Exodus)
         {
             return new ExodusStructure(game, data);
         }
-        else if (game._gameType == eGame.Sandbox)
+        else if (gameType == eGame.Sandbox)
         {
             return new SandboxStructure(game, data);
         }

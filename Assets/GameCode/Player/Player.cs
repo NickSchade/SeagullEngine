@@ -15,7 +15,7 @@ public class Player
         _name = demo.name;
         _color = demo.color;
         _resources = new PlayerResources(this, demo.resources);
-        _buildQueue = BuildQueueFactory.Make(type, this);
+        _buildQueue = FBuildQueue.Make(type, this);
     }
     public PlayerDemographics GetDemographics()
     {

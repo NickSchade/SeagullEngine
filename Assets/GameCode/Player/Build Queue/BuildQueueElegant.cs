@@ -33,7 +33,7 @@ public class BuildQueueElegant : IBuildQueue
             }
             index++;
         }
-        if (returnQueue[returnQueue.Count - 1] != bqs)
+        if (returnQueue.Count > 0 && returnQueue[returnQueue.Count - 1] != bqs)
         {
             returnQueue.Add(bqs);
         }

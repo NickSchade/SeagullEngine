@@ -6,10 +6,9 @@ public class ExodusGame : HomelandsGame
 {
     ExodusHabitabilitySystem _habitability;
 
-    public ExodusGame(GameManager gameManager) : base(gameManager)
+    public ExodusGame(GameManager gameManager, GameSettings settings) : base(gameManager, settings)
     {
         Debug.Log("Constructing Exodus Game");
     }
-    
 }
 

@@ -11,7 +11,7 @@ public class MapBuilderBasic : MapBuilderBase, IMapBuilder
     public Dictionary<Pos, HomelandsLocation> Make(MapSettings mapSettings)
     {
 
-        IMapLocSetter mapLocSetter = MapLocSetterFactory.Make(mapSettings.tileShape);
+        IMapLocSetter mapLocSetter = MapLocSetterFactory.Make(mapSettings._tileShape);
 
         Dictionary<Pos, HomelandsLocation> locations = BuildLocations(mapSettings, mapLocSetter);
         SetNeighbors(mapSettings, locations);
@@ -38,7 +38,7 @@ public class MapBuilderBasic : MapBuilderBase, IMapBuilder
 
     HomelandsResource GetResource(int x, int y)
     {
-        List<int> starPoints = new List<int> { 0, 3,9,15,18 };
+        List<int> starPoints = new List<int> { 3, 9, 15 };
         if (starPoints.Contains(x) && starPoints.Contains(y))
         {
             //Debug.Log($"Star Point at {x},{y}");

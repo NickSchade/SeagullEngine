@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
-
 public class MapBuilderGaea : MapBuilderBase, IMapBuilder
 {
-
     public MapBuilderGaea(HomelandsGame game)
     {
         _game = game;
@@ -21,7 +17,7 @@ public class MapBuilderGaea : MapBuilderBase, IMapBuilder
         GaeaWorldbuilder map = new GaeaWorldbuilder(settings.xDim, settings.yDim);
         map.GenerateMap();
 
-        IMapLocSetter mapLocSetter = MapLocSetterFactory.Make(_game._tileShape);
+        IMapLocSetter mapLocSetter = MapLocSetterFactory.Make(_game._settings._mapSettings._tileShape);
 
         Dictionary<Pos, HomelandsLocation> locations = BuildLocations(map, mapLocSetter);
 

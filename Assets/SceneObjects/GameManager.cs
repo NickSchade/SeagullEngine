@@ -6,36 +6,41 @@ public class GameManager : MonoBehaviour
 {
     // GRAPHICS
     public GraphicsManager _graphicsManager;
-    // HACKY PLAYER DEMO UI
-    public UiPlayerDemoManager _playerDemoManager;
+    public HudManager _hudManager;
+
     // INPUT
     public InputManager _inputManager;
+
+    // GAME CONFIGS
+    public GameConfigs _gameConfigs;
+
     // GAME
-    public eGame _gameType;
-    public eMap _mapType;
-    public eTileShape _tileShape;
-    public eBuildQueue _buildQueueType;
-    public int _numberOfPlayers;
     public HomelandsGame _game;
     
-    
-
     // Start is called before the first frame update
     void Start()
     {
-        _game = GameFactory.Make(this);
+        GameSettings settings = FGameSettings.Make(_gameConfigs);
+
+        _game = FGame.Make(this, settings);
+
         _inputManager.Initialize(this, _game._inputHandler);
-        _playerDemoManager.Initialize(_game);
+        //_playerDemoManager.Initialize(_game);
+        _hudManager.InitializeUi(_game, settings);
     }
 
     // Update is called once per frame
     void Update()
     {
         InputHandlerInfo inputHandlerInfo = _inputManager.GetInput();
+
         HandleCamera(inputHandlerInfo);
+
         TickInfo tick = _game.TakeTick(inputHandlerInfo);
+
         _graphicsManager.Draw(tick._graphicsData);
-        _playerDemoManager.Draw();
+        //_playerDemoManager.Draw();
+        _hudManager.UpdateUi(tick);
     }
 
     void HandleCamera(InputHandlerInfo ihi)

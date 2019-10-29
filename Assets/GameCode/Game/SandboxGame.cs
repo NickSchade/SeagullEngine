@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SandboxGame : HomelandsGame
 {
-    public SandboxGame(GameManager gameManager) : base(gameManager)
+    public SandboxGame(GameManager gameManager, GameSettings settings) : base(gameManager, settings)
     {
         Debug.Log("Constructing Homelands Sandbox Game");
     }

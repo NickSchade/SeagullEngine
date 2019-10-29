@@ -8,11 +8,12 @@ public static class LocationFactory
 {
     public static HomelandsLocation Make(HomelandsGame game, Pos position, HomelandsTerrain terrain, HomelandsResource resource)
     {
-        if (game._gameType == eGame.Exodus)
+        eGame gameType = game._settings._gameType;
+        if (gameType == eGame.Exodus)
         {
             return new ExodusLocation(game, position, terrain, resource);
         }
-        else if (game._gameType == eGame.Sandbox)
+        else if (gameType == eGame.Sandbox)
         {
             return new SandboxLocation(game, position, terrain, resource);
         }

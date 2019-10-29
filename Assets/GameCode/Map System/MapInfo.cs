@@ -7,19 +7,17 @@ public struct MapInfo
     public HomelandsGame game;
     public Dictionary<Pos, HomelandsLocation> locations;
     public eTileShape tileShape;
-    public int xDim, yDim;
     public bool wrapEW, wrapNS;
+    public MapSettings _settings;
     public Dictionary<string, Pos> pathMap;
     public MapInfo(HomelandsGame g, Dictionary<Pos,HomelandsLocation> locs, MapSettings settings, Dictionary<string,Pos> pm)
     {
-
+        _settings = settings;
         game = g;
         locations = locs;
-        tileShape = settings.tileShape;
-        xDim = settings.xDim;
-        yDim = settings.yDim;
-        wrapEW = settings.wrapEW;
-        wrapNS = settings.wrapNS;
+        tileShape = settings._tileShape;
+        wrapEW = settings.wrapEastWest;
+        wrapNS = settings.wrapNorthSouth;
         pathMap = pm;
     }
 }

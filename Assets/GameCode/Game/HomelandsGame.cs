@@ -4,53 +4,40 @@ using UnityEngine;
 using System.Linq;
 
 
+
 public abstract partial class HomelandsGame
 {
     public GameManager _gameManager;
+    
+    public GameSettings _settings { get; set; }
 
-    public eGame _gameType { get; set; }
-    public eMap _mapType { get; set; }
-    public eTileShape _tileShape { get; set; }
-    public int _numberOfPlayers { get; set; }
-
-    public eBuildQueue _buildQueueType;
-
-
-
-
-    public IPlayerSystem _playerSystem { get; set; }
-
-    public IInputHandler _inputHandler { get; set; }
+    public IPlayerSys _playerSystem { get; set; }
+    public InputHandler _inputHandler { get; set; }
 
     public Dictionary<Pos, HomelandsLocation> _locations;
     public Viewer _viewer;
     public IStatsBuilder _statsBuilder;
     public GameStats _stats;
 
+    public ITickSys _tickSystem;
 
-    public ITickSystem _tickSystem;
-
-    public HomelandsGame(GameManager gameManager)
+    public HomelandsGame(GameManager gameManager, GameSettings settings)
     {
         Debug.Log("Constructing Homelands Game");
 
         _gameManager = gameManager;
-        _tileShape = gameManager._tileShape;
-        _gameType = gameManager._gameType;
-        _mapType = gameManager._mapType;
-        _numberOfPlayers = gameManager._numberOfPlayers;
-        _buildQueueType = gameManager._buildQueueType;
+        _settings = settings;
 
-        _tickSystem = TickSystemFactory.Make(eTickSystem.SemiRealTime, this);
+        _tickSystem = FTickSys.Make(this, _settings._tickSettings);
         _statsBuilder = new StatsBuilderBasic(this);
         _viewer = new Viewer(this);
-        IMapBuilder mapBuilder = MapBuilderFactory.Make(_mapType, this);
-        MapSettings settings = new MapSettings(_tileShape, 19, 19, false, false);
-        _locations = mapBuilder.Make(settings);
+
+        IMapBuilder mapBuilder = MapBuilderFactory.Make(_settings._mapSettings._mapType, this);
+
+        _locations = mapBuilder.Make(_settings._mapSettings);
         _inputHandler = new InputHandler(this);
 
-        _playerSystem = PlayerSystemFactory.Make(ePlayerSystem.TurnBased, this, _numberOfPlayers);
-        //_playerSystem.AddPlayer();
+        _playerSystem = FPlayerSys.Make(this, _settings._playerSettings);
     }
 
     public virtual TickInfo TakeTick(InputHandlerInfo inputHandlerInfo)
@@ -60,12 +47,12 @@ public abstract partial class HomelandsGame
 
         // RESOLVE INPUT IN GAME
         HomelandsTurnData turnData = _inputHandler.HandleInput(inputHandlerInfo);
-
+        
         // DRAW GAME
         List<GraphicsData> graphicsToDraw = Draw();
 
         // OUTPUT TURN INFO
-        TickInfo tickInfo = _tickSystem.GetTick(graphicsToDraw);
+        TickInfo tickInfo = _tickSystem.GetTick(graphicsToDraw, turnData);
         return tickInfo;
     }
 
@@ -83,6 +70,7 @@ public abstract partial class HomelandsGame
         PerformBuild();
     }
 
+    #region Perform Radius: Build - Extract - War
     void PerformBuild()
     {
         List<Player> players = _playerSystem.GetPlayers();
@@ -137,6 +125,7 @@ public abstract partial class HomelandsGame
             }
         }
     }
+    #endregion
 
     void UpdateLocationStats()
     {

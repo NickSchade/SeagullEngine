@@ -2,7 +2,8 @@
 using System.Collections;
 
 
-public enum eGame { Exodus, Sandbox }
+public enum eGame { Exodus, Sandbox, HotSeat }
+
 public enum eTileShape { Square, Hex };
 public enum eVisibility { Visible, Fog, Unexplored };
 public enum eView { God, Vision, Control, Extraction, Military, Null };
