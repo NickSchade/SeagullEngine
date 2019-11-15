@@ -11,3 +11,6 @@ public enum eTerrain { Land, Sea, Mountain };
 
 public enum eRadius { Vision, Control, Extraction, Military };
 public enum ePath { Euclidian, NodeUniform, NodeEuclidian, NodeWeight };
+
+public enum eEndCondition { LastOneStanding, Survival};
+public enum eTickSystem { TurnBased, SemiRealTime };

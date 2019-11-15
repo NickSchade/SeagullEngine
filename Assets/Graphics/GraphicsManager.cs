@@ -102,10 +102,13 @@ public class GraphicsManager : MonoBehaviour
     {
         foreach (GraphicsData gd in graphicsData)
         {
-            Pos pos = gd._pos;
-            DrawLocations(gd);
-            DrawStructures(gd);
-            DrawResources(gd);
+            if (gd != null)
+            {
+                Pos pos = gd._pos;
+                DrawLocations(gd);
+                DrawStructures(gd);
+                DrawResources(gd);
+            }
         }
     }
 }

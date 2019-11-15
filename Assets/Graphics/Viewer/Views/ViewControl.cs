@@ -12,8 +12,8 @@ public class ViewControl : ViewVision
     {
         
         Color c = GetFogOfWarColor(location, stats);
-        IPlayerSys ps = _game._playerSystem;
-        Player currentPlayer = ps.GetPlayer();
+        PlayerSystem ps = _game._playerSystem;
+        Player currentPlayer = ps._currentPlayer;
         c = stats._control._controllingPlayers[currentPlayer]  ? Color.white : c;
         return new LocationGraphicsData(c);
     }

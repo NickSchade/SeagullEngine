@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 
-public class TickSysTurnBased : BTickSys, ITickSys
+public class TickSysTurnBased : TickSystem
 {
     public TickSysTurnBased(HomelandsGame game, TickSettings settings) : base(game, settings)
     {

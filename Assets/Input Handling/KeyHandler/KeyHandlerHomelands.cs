@@ -2,75 +2,52 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class KeyHandlerHomelands : IKeyHandler
+public class KeyHandlerHomelands
 {
     HomelandsGame _game;
-    KeyCode _changePlayers = KeyCode.P;
-    KeyCode _changeView = KeyCode.V;
-    KeyCode _endTurn = KeyCode.Return;
-
     public KeyHandlerHomelands(HomelandsGame game)
     {
         _game = game;
     }
     public KeyHandlerOutput HandleKeys(KeyHandlerInfo keyHandlerInfo)
     {
-        Dictionary<KeyCode, KeyCodeInfo> keys = keyHandlerInfo._keysInterfaced;
-
-        bool changedView = ChangeView(keys);
-        bool changedPlayer = ChangePlayer(keys);
-        bool endedTurn = EndTurn(keys);
-
-        bool somethingHappened = changedView || changedPlayer || endedTurn;
-
-        KeyHandlerOutput kho = new KeyHandlerOutput(somethingHappened, endedTurn);
+        Dictionary<ePlayerAction, bool> keyActions = GetKeyActions(keyHandlerInfo);
+        KeyHandlerOutput kho = new KeyHandlerOutput(keyActions);
         return kho;
     }
-    bool ChangePlayer(Dictionary<KeyCode, KeyCodeInfo> keys)
+    Dictionary<ePlayerAction, bool> GetKeyActions(KeyHandlerInfo keyHandlerInfo)
     {
-        KeyCode code = _changePlayers;
-        bool changedPlayer = false;
-        if (keys.ContainsKey(code))
+        Dictionary<ePlayerAction, bool> keyActions = new Dictionary<ePlayerAction, bool>();
+        Dictionary<KeyCode, KeyCodeInfo> keys = keyHandlerInfo._keysInterfaced;
+        foreach (KeyCode key in keys.Keys)
         {
-            KeyCodeInfo kci = keys[code];
-            Dictionary<eInput, bool> inputs = kci._keyCodeInfo;
-            if (inputs[eInput.Up])
-            {
-                _game._playerSystem.ChangePlayer();
-                changedPlayer = true;
-            }
+            ePlayerAction action = InputSettings.GetAction(key);
+            KeyCodeInfo kci = keys[key];
+            keyActions[action] = kci._keyCodeInfo[eInput.Up];
         }
-        return changedPlayer;
+        return keyActions;
     }
-    bool ChangeView(Dictionary<KeyCode, KeyCodeInfo> keys)
+    void HandleScroll(KeyHandlerInfo khi)
     {
-        KeyCode code = _changeView;
-        bool changedView = false;
-        if (keys.ContainsKey(code))
+        Dictionary<KeyCode, Vector3> scrollers = new Dictionary<KeyCode, Vector3>
         {
-            KeyCodeInfo kci = keys[code];
-            Dictionary<eInput, bool> inputs = kci._keyCodeInfo;
-            if (inputs[eInput.Up])
+            {InputSettings.GetKeyCode(ePlayerAction.ScrollUp), new Vector3(0,0,1) },
+            {InputSettings.GetKeyCode(ePlayerAction.ScrollDown), new Vector3(0,0,-1) },
+            {InputSettings.GetKeyCode(ePlayerAction.ScrollLeft), new Vector3(-1,0,0) },
+            {InputSettings.GetKeyCode(ePlayerAction.ScrollRight), new Vector3(1,0,0) }
+        };
+
+        Vector3 p = Camera.main.transform.position;
+        Vector3 newP = new Vector3(p.x, p.y, p.z);
+        foreach (KeyCode k in scrollers.Keys)
+        {
+            KeyCodeInfo kci = khi._keysInterfaced[k];
+            if (kci._keyCodeInfo[eInput.Down] || kci._keyCodeInfo[eInput.Held])
             {
-                _game._viewer.ToggleNextView();
-                changedView = true;
+                Vector3 s = scrollers[k];
+                newP = new Vector3(newP.x + s.x, newP.y + s.y, newP.z + s.z);
             }
         }
-        return changedView;
-    }
-    bool EndTurn(Dictionary<KeyCode, KeyCodeInfo> keys)
-    {
-        KeyCode code = _endTurn;
-        bool endedTurn = false;
-        if (keys.ContainsKey(code))
-        {
-            KeyCodeInfo kci = keys[code];
-            Dictionary<eInput, bool> inputs = kci._keyCodeInfo;
-            if (inputs[eInput.Up])
-            {
-                endedTurn = true;
-            }
-        }
-        return endedTurn;
+        Camera.main.transform.position = newP;
     }
 }

@@ -8,7 +8,7 @@ public struct GameStats
     public GameStats(HomelandsGame game)
     {
         Dictionary<Player,int> numStruts = new Dictionary<Player, int>();
-        List<Player> players = game._playerSystem.GetPlayers();
+        List<Player> players = game._playerSystem._players;
         foreach (Player player in players)
         {
             numStruts[player] = 0;

@@ -19,7 +19,8 @@ public static class LocationFactory
         }
         else
         {
-            throw new KeyNotFoundException();
+            return new SandboxLocation(game, position, terrain, resource);
+            //throw new KeyNotFoundException();
         }
     }
 }

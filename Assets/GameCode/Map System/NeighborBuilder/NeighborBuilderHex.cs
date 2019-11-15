@@ -41,8 +41,8 @@ public class NeighborBuilderHex : NeighborBuilder
         {
             int i = hexNeighbors[k][0];
             int j = hexNeighbors[k][1];
-            float X = mapInfo.wrapEW ? (mapInfo._settings.xDim + x + i) % mapInfo._settings.xDim : x + i;
-            float Y = mapInfo.wrapNS ? (mapInfo._settings.yDim + y + j) % mapInfo._settings.yDim : y + j;
+            float X = mapInfo.wrapEW ? (mapInfo._settings._xDim + x + i) % mapInfo._settings._xDim : x + i;
+            float Y = mapInfo.wrapNS ? (mapInfo._settings._yDim + y + j) % mapInfo._settings._yDim : y + j;
 
             Loc l2 = new Loc(X, Y);
             if (mapInfo.pathMap.ContainsKey(l2.key()))

@@ -35,21 +35,34 @@ public class GaeaWorldbuilder
     public RainBuilder RainBuilder;
     public FlowBuilder flowBuilder;
 
-    WaterBodyPrefence prefWaterBody = WaterBodyPrefence.Continent;
+    WaterBodyPrefence prefWaterBody;
 
     // Use this for initialization
-    public GaeaWorldbuilder(int _xDim, int _yDim, int _iExpand = 1, float _percentSea = 0.5f, float _percentRiver = 0.01f)
+    public GaeaWorldbuilder(int _xDim, int _yDim)
     {
         xDim = _xDim;
         yDim = _yDim;
-        iExpand = _iExpand;
+        SetDefaultLevels();
+        prefWaterBody = WaterBodyPrefence.None;
+        initializeArrays();
+    }
+    public GaeaWorldbuilder(MapSettings mapSettings)
+    {
+        xDim = mapSettings._xDim;
+        yDim = mapSettings._yDim;
+        iExpand = mapSettings._expansionFactor;
+        SetDefaultLevels();
+        percentRiver = mapSettings._percentRiver;
+        percentSea = mapSettings._percentOcean;
+        prefWaterBody = mapSettings._waterBodyPref;
+        initializeArrays();
+    }
+
+    void SetDefaultLevels()
+    {
         seaLevel = 0.5f;
         riverLevel = 0.5f;
         iceLevel = 0.3f;
-        percentRiver = _percentRiver;
-        percentSea = _percentSea;
-        initializeArrays();
-
     }
 
     void initializeArrays()
@@ -82,6 +95,8 @@ public class GaeaWorldbuilder
         CreateRain(RainMethod.Wind);
 
         CreateFluxErosion(3, 30);
+        
+        MapUtil.TransformEqualizeMapByLevelAboveSea(ref riverLevel, ref WaterFlux, percentRiver, Elevation, seaLevel);
 
         //PaintRegions();
 
@@ -94,17 +109,21 @@ public class GaeaWorldbuilder
         MapUtil.TransformApplyPreferencesWaterBody(ref Elevation, seaLevel, prefWaterBody, bench);
         SetTemperature();
 
+        MapUtil.TransformEqualizeMapByLevel(ref seaLevel, ref Elevation, percentSea, bench);
     }
     public void CreateElevation()
     {
         //Debug.Log("Creating Elevation of Dimensions [" + xDim + "," + yDim + "]");
-        elevationBuilder = new ElevationBuilder(MapUtil.nFromDims(xDim, yDim));
+        int N = MapUtil.nFromDims(xDim, yDim);
+        elevationBuilder = new ElevationBuilder(N);
+
         elevationBuilder.SetElevationWithMidpointDisplacement(iExpand, bench: bench);
-        //elevationBuilder.TrimToDimensions(xDim, yDim);
+        elevationBuilder.TrimToDimensions(xDim, yDim);
         Elevation = elevationBuilder.Elevation;
 
         xDim = Elevation.GetLength(0);
         yDim = Elevation.GetLength(1);
+
         //Debug.Log("Creating Elevation of Dimensions [" + xDim + "," + yDim + "]");
         WaterFlux = new float[xDim, yDim];
         Rain = new float[xDim, yDim];
@@ -116,12 +135,12 @@ public class GaeaWorldbuilder
         Harbor = new float[xDim, yDim];
         SetTemperature();
     }
-    public void CreateElevationAdjustments(int iterDepression = 25, float waterPercent = 0.5f)
+    public void CreateElevationAdjustments(int iterDepression, float waterPercent)
     {
         ResolveDepression(iterDepression, waterPercent);
         SetTemperature(); // Temp now in case we need it for rain
     }
-    public void ResolveDepression(int iterDepression = 35, float waterPercent = 0.5f)
+    public void ResolveDepression(int iterDepression, float waterPercent)
     {
         MapUtil.TransformResolveDepressions(ref Elevation, iterDepression, bench, false);
         MapUtil.TransformEqualizeMapByLevel(ref seaLevel, ref Elevation, waterPercent, bench);
@@ -916,6 +935,7 @@ public class ElevationBuilder
         {
             bench.StartBenchmark("Midpoint Displacement");
         }
+
         MidpointDisplacement mpd = new MidpointDisplacement(N);
         Elevation = mpd.Elevation;
         MapUtil.TransformMapMinMax(ref Elevation, MapUtil.dNormalize);
@@ -931,6 +951,8 @@ public class ElevationBuilder
     }
     public void TrimToDimensions(int xDim, int yDim)
     {
+        int xOld = Elevation.GetLength(0);
+        int yOld = Elevation.GetLength(1);
         float[,] dElev = new float[xDim, yDim];
         for (int x = 0; x < xDim; x++)
         {

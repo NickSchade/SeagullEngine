@@ -10,4 +10,9 @@ public class MapConfigs : MonoBehaviour
     public int yDim;
     public bool wrapEastWest;
     public bool wrapNorthSouth;
+    [Range(0.0f,1.0f)] public float percentLand;
+    [Range(0.0f, 0.4f)] public float percentRiver;
+    public int expansionFactor;
+    public WaterBodyPrefence waterBodyPref;
+
 }

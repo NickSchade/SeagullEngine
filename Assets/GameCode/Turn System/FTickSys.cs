@@ -2,9 +2,9 @@
 using System.Collections;
 
 
-public static class FTickSys
+public static class FTickSystem
 {
-    public static ITickSys Make(HomelandsGame game, TickSettings settings)
+    public static TickSystem Make(HomelandsGame game, TickSettings settings)
     {
         eTickSystem type = settings._type;
         if (type == eTickSystem.TurnBased)

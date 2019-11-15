@@ -16,5 +16,4 @@ public class Clickable : MonoBehaviour
     {
         pos = _pos;
     }
-
 }

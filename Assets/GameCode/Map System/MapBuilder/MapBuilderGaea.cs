@@ -13,14 +13,12 @@ public class MapBuilderGaea : MapBuilderBase, IMapBuilder
     {
         Debug.Log("Making Map");
 
-
-        GaeaWorldbuilder map = new GaeaWorldbuilder(settings.xDim, settings.yDim);
+        GaeaWorldbuilder map = new GaeaWorldbuilder(settings);
         map.GenerateMap();
 
         IMapLocSetter mapLocSetter = MapLocSetterFactory.Make(_game._settings._mapSettings._tileShape);
 
         Dictionary<Pos, HomelandsLocation> locations = BuildLocations(map, mapLocSetter);
-
 
         SetNeighbors(settings, locations);
 
@@ -38,7 +36,7 @@ public class MapBuilderGaea : MapBuilderBase, IMapBuilder
                 Loc l = new Loc(x, y);
                 Pos p = new Pos(l, mapLocSetter);
                 Dictionary<string, float> locationQualities = map.GetLocationQualities(x, y);
-                HomelandsTerrain terrain = GetTerrain(locationQualities);
+                HomelandsTerrain terrain = GetTerrain(map, locationQualities);
                 HomelandsResource resource = terrain._type == eTerrain.Land && Random.Range(0f, 1f) > 0.90f ? new HomelandsResource() : null;
                 locations[p] = LocationFactory.Make(_game, p, terrain, resource);
             }
@@ -46,21 +44,21 @@ public class MapBuilderGaea : MapBuilderBase, IMapBuilder
         return locations;
     }
 
-    HomelandsTerrain GetTerrain(Dictionary<string, float> locationQualities)
+    HomelandsTerrain GetTerrain(GaeaWorldbuilder map, Dictionary<string, float> locationQualities)
     {
-        eTerrain type = GetTerrainTypeFromQualities(locationQualities);
+        eTerrain type = GetTerrainTypeFromQualities(map, locationQualities);
         HomelandsTerrain terrain = new HomelandsTerrain(type);
         return terrain;
     }
 
-    eTerrain GetTerrainTypeFromQualities(Dictionary<string, float> locationQualities)
+    eTerrain GetTerrainTypeFromQualities(GaeaWorldbuilder map, Dictionary<string, float> locationQualities)
     {
         float elevation = locationQualities["Elevation"];
-        if (elevation < 0.4)
+        if (elevation < map.seaLevel)
         {
             return eTerrain.Sea;
         }
-        else if (elevation < 0.8)
+        else if (elevation < 0.9f)
         {
             return eTerrain.Land;
         }

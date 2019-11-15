@@ -20,7 +20,7 @@ public class UiPlayerDemoManager : MonoBehaviour
 
     public void Draw()
     {
-        List<Player> players = _game._playerSystem.GetPlayers();
+        List<Player> players = _game._playerSystem._players;
         foreach (Player p in players)
         {
             if (!_ui.ContainsKey(p))

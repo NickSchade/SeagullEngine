@@ -11,7 +11,7 @@ public abstract partial class HomelandsGame
     
     public GameSettings _settings { get; set; }
 
-    public IPlayerSys _playerSystem { get; set; }
+    public PlayerSystem _playerSystem { get; set; }
     public InputHandler _inputHandler { get; set; }
 
     public Dictionary<Pos, HomelandsLocation> _locations;
@@ -19,7 +19,10 @@ public abstract partial class HomelandsGame
     public IStatsBuilder _statsBuilder;
     public GameStats _stats;
 
-    public ITickSys _tickSystem;
+    public TickSystem _tickSystem;
+    public EndSystem _endSystem;
+    public StartPositioner _startPositioner;
+
 
     public HomelandsGame(GameManager gameManager, GameSettings settings)
     {
@@ -28,7 +31,7 @@ public abstract partial class HomelandsGame
         _gameManager = gameManager;
         _settings = settings;
 
-        _tickSystem = FTickSys.Make(this, _settings._tickSettings);
+        _tickSystem = FTickSystem.Make(this, _settings._tickSettings);
         _statsBuilder = new StatsBuilderBasic(this);
         _viewer = new Viewer(this);
 
@@ -37,7 +40,24 @@ public abstract partial class HomelandsGame
         _locations = mapBuilder.Make(_settings._mapSettings);
         _inputHandler = new InputHandler(this);
 
-        _playerSystem = FPlayerSys.Make(this, _settings._playerSettings);
+        _playerSystem = new PlayerSystem(this, _settings._playerSettings._numberOfPlayers);
+        _endSystem = FEndSystem.Make(_settings._endCondition, this);
+        _startPositioner = FStartPositioner.Make(eStartPosition.OppositeCorners, this);
+        InitializePlayerStarts();
+    }
+
+    void InitializePlayerStarts()
+    {
+        UpdateGame();
+        Dictionary<Player, Pos> startingPositions = _startPositioner.GetStartingPos();
+        foreach (Player player in startingPositions.Keys)
+        {
+            Pos p = startingPositions[player];
+            HomelandsLocation location = _locations[p];
+            dStructurePlacement structure = location.Click(player);
+            player._buildQueue.TryToAddStructureToBuildQueue(structure);
+        }
+        EndTurn();
     }
 
     public virtual TickInfo TakeTick(InputHandlerInfo inputHandlerInfo)
@@ -64,6 +84,8 @@ public abstract partial class HomelandsGame
 
     public void EndTurn()
     {
+        _tickSystem._turnNumber++;
+        _tickSystem._lastTurnTime = Time.time;
         Debug.Log("Ending Turn");
         PerformExtraction();
         PerformWar();
@@ -73,7 +95,7 @@ public abstract partial class HomelandsGame
     #region Perform Radius: Build - Extract - War
     void PerformBuild()
     {
-        List<Player> players = _playerSystem.GetPlayers();
+        List<Player> players = _playerSystem._players;
         foreach (Player player in players)
         {
             player._buildQueue.Build();
@@ -83,8 +105,7 @@ public abstract partial class HomelandsGame
     void PerformExtraction()
     {
         Dictionary<Player, float> income = new Dictionary<Player, float>();
-        List<Player> players = _playerSystem.GetPlayers();
-        foreach (Player p in players)
+        foreach (Player p in _playerSystem._players)
         {
             income[p] = 0f;
         }
@@ -93,13 +114,13 @@ public abstract partial class HomelandsGame
             if (location._resource != null)
             {
                 Dictionary<Player, float> extractionRates = location._stats._extraction._extractionRate;
-                foreach (Player p in players)
+                foreach (Player p in _playerSystem._players)
                 {
                     income[p] += extractionRates[p];
                 }
             }
         }
-        foreach (Player p in players)
+        foreach (Player p in _playerSystem._players)
         {
             p._resources.Gain(income[p]);
         }
@@ -148,7 +169,37 @@ public abstract partial class HomelandsGame
         return graphics;
     }
 
+    public void RemoveDeadPlayers()
+    {
+        if (_tickSystem._turnNumber > 0)
+        {
+            List<Player> players = new List<Player>(_playerSystem._players);
+            Dictionary<Player, int> numberOfStructures = new Dictionary<Player, int>();
+            foreach (Player player in players)
+            {
+                numberOfStructures[player] = 0;
+            }
+            foreach (HomelandsLocation location in _locations.Values)
+            {
+                if (location._structure != null)
+                {
+                    numberOfStructures[location._structure._owner] += 1;
+                }
+            }
+            foreach (Player player in players)
+            {
+                if (numberOfStructures[player] == 0)
+                {
+                    _playerSystem._players.Remove(player);
+                }
+            }
+        }
+    }
 
+    public void CheckEndConditions()
+    {
+        _endSystem.CheckEndConditions();
+    }
 }
 
 

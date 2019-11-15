@@ -17,7 +17,8 @@ public static class StructureFactory
         }
         else
         {
-            throw new System.NotImplementedException();
+            return new SandboxStructure(game, data);
+            //throw new System.NotImplementedException();
         }
     }
 }

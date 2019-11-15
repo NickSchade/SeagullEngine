@@ -22,9 +22,9 @@ public class MapBuilderBasic : MapBuilderBase, IMapBuilder
     Dictionary<Pos, HomelandsLocation> BuildLocations(MapSettings mapSettings, IMapLocSetter mapLocSetter)
     {
         Dictionary<Pos, HomelandsLocation> locations = new Dictionary<Pos, HomelandsLocation>();
-        for (int x = 0; x < mapSettings.xDim; x++)
+        for (int x = 0; x < mapSettings._xDim; x++)
         {
-            for (int y = 0; y < mapSettings.yDim; y++)
+            for (int y = 0; y < mapSettings._yDim; y++)
             {
                 Loc l = new Loc(x, y);
                 Pos p = new Pos(l, mapLocSetter);

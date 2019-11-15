@@ -19,7 +19,8 @@ public static class FGame
         }
         else
         {
-            throw new System.NotImplementedException();
+            return new SandboxGame(gameManager, settings);
+            //throw new System.NotImplementedException();
         }
     }
 
@@ -32,12 +33,10 @@ public static class FGame
         }
         else if (gameType == eGame.Exodus)
         {
-            settings._playerSettings._numberOfPlayers = 1;
             settings._mapSettings._mapType = eMap.Gaea;
         }
         else if (gameType == eGame.HotSeat)
         {
-            settings._playerSettings._playerSystem = ePlayerSys.Serial;
             settings._tickSettings._type = eTickSystem.TurnBased;
         }
         return settings;

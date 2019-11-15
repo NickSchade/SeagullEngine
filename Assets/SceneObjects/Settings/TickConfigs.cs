@@ -6,5 +6,6 @@ public class TickConfigs : MonoBehaviour
 {
     public eTickSystem _type;
     public float _secondsPerTurn;
+
 }
 

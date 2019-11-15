@@ -16,8 +16,8 @@ public struct MapInfo
         game = g;
         locations = locs;
         tileShape = settings._tileShape;
-        wrapEW = settings.wrapEastWest;
-        wrapNS = settings.wrapNorthSouth;
+        wrapEW = settings._wrapEastWest;
+        wrapNS = settings._wrapNorthSouth;
         pathMap = pm;
     }
 }

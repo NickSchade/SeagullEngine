@@ -8,10 +8,10 @@ public class InputManager : MonoBehaviour
 {
     public GameManager _gameManager;
 
-    private IKeyHandler _keyHandler;
-    private IMouseHandler _mouseHandler;
+    private KeyHandlerHomelands _keyHandler;
+    private MouseHandlerHomelands _mouseHandler;
     
-    public void Initialize(GameManager gameManager, IInputHandler inputHandler)
+    public void Initialize(GameManager gameManager, InputHandler inputHandler)
     {
         _gameManager = gameManager;
         _keyHandler = inputHandler._keyHandler;
@@ -27,7 +27,8 @@ public class InputManager : MonoBehaviour
     }
     List<KeyCode> GetInputKeys()
     {
-        return Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>().ToList();
+        //return Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>().ToList();
+        return InputSettings.GetAllKeyCodes();
     }
     public KeyHandlerInfo GetKeyInfo()
     {
@@ -53,9 +54,9 @@ public class InputManager : MonoBehaviour
     Dictionary<eInput,bool> GetClickStatus(int iButton)
     {
         Dictionary<eInput, bool> clicks = new Dictionary<eInput, bool>();
+        clicks[eInput.Held] = Input.GetMouseButton(iButton);
         clicks[eInput.Up] = Input.GetMouseButtonUp(iButton);
         clicks[eInput.Down] = Input.GetMouseButtonDown(iButton);
-        clicks[eInput.Held] = Input.GetMouseButton(iButton);
         return clicks;
     }
     public MouseHandlerInfo GetMouseInfo()
@@ -66,7 +67,7 @@ public class InputManager : MonoBehaviour
         Dictionary<eInput, bool> rightClick = GetClickStatus(1);
         float axis = Input.GetAxis("Mouse ScrollWheel");
 
-        if (leftClick.ContainsValue(true) || rightClick.ContainsValue(true))
+        if (true || leftClick.ContainsValue(true) || rightClick.ContainsValue(true))
         {
             foreach (RaycastHit hit in hits)
             {

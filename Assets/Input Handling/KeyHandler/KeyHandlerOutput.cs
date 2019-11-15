@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class KeyHandlerOutput
 {
-    public bool _somethingHappened;
-    public bool _turnEnded;
-    public KeyHandlerOutput(bool happened, bool ended)
+    public Dictionary<ePlayerAction, bool> _keyActions;
+    public KeyHandlerOutput(Dictionary<ePlayerAction,bool> keyActions)
     {
-        _somethingHappened = happened;
-        _turnEnded = ended;
+        _keyActions = keyActions;
     }
 }

@@ -3,11 +3,11 @@ using System.Collections;
 
 public class HomelandsTurnData 
 {
-    public dStructurePlacement _structureToBuild;
-    public bool _endTurn;
-    public HomelandsTurnData(dStructurePlacement structureToBuild, bool endturn)
+    public KeyHandlerOutput _kho;
+    public MouseHandlerOutput _mho;
+    public HomelandsTurnData(KeyHandlerOutput kho, MouseHandlerOutput mho)
     {
-        _structureToBuild = structureToBuild;
-        _endTurn = endturn;
+        _kho = kho;
+        _mho = mho;
     }
 }

@@ -1,44 +1,23 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TurnUi : MonoBehaviour
 {
-    public TurnUiTurnbased _turnBased;
-    public TurnUiRealtime _realTime;
+    public Text _text;
+    public Slider _slider;
 
-    eTickSystem _tickSystem;
-
-    public void Initialize(HomelandsGame _game, TickSettings settings)
+    HomelandsGame _game;
+    internal void Initialize(HomelandsGame game, TickSettings tickSettings)
     {
-        _tickSystem = settings._type;
-
-        if (_tickSystem == eTickSystem.SemiRealTime)
-        {
-            _realTime.InitializeUi(_game);
-        }
-        else if (_tickSystem == eTickSystem.TurnBased)
-        {
-            _turnBased.InitializeUi(_game);
-        }
-        else
-        {
-            throw new System.NotImplementedException();
-        }
+        _game = game;
     }
-    public void UpdateUi(TickInfo tick)
+
+    internal void UpdateUi(TickInfo tick)
     {
-        if (_tickSystem == eTickSystem.SemiRealTime)
-        {
-            _realTime.UpdateUi(tick);
-        }
-        else if (_tickSystem == eTickSystem.TurnBased)
-        {
-            _turnBased.UpdateUi(tick);
-        }
-        else
-        {
-            throw new System.NotImplementedException();
-        }
+        _text.text = "Turn # " + tick._turnNumber.ToString();
+        _slider.value = tick._progressToNextTurn;
     }
 }

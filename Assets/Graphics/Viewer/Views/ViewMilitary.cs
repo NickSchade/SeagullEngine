@@ -12,7 +12,7 @@ public class ViewMilitary : View
     {
         Color c = GetFogOfWarColor(location, stats);
         Dictionary<Player, float> militaryDict = stats._military._attack;
-        float military = militaryDict[_game._playerSystem.GetPlayer()];
+        float military = militaryDict[_game._playerSystem._currentPlayer];
         if (military > 0f)
         {
             c = Color.Lerp(Color.white, Color.red, military / 5f);

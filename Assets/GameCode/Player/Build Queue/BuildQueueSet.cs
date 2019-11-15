@@ -5,8 +5,10 @@ using System.Linq;
 public class BuildQueueSet
 {
     Player _player;
-    List<dStructurePlacement> _set;
     int _maxSetSize;
+
+    public List<dStructurePlacement> _set;
+
     public BuildQueueSet(Player player, int maxSetSize)
     {
         _player = player;
@@ -88,6 +90,7 @@ public class BuildQueueSet
     }
     public bool Build()
     {
+        Debug.Log("Building Set");
         if (CanAffordSet())
         {
             foreach (dStructurePlacement spd in _set)
@@ -96,6 +99,7 @@ public class BuildQueueSet
                 spd.location._structure = newStructure;
                 _player._resources.Pay(spd.data.cost);
                 _player._game._locations[spd.location._pos]._structure = newStructure;
+                _player._buildQueue._queue.Remove(spd);
             }
             return true;
         }

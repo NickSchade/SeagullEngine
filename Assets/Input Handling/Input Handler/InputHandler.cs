@@ -2,12 +2,12 @@
 using System.Collections;
 
 
-public class InputHandler : IInputHandler
+public class InputHandler
 {
     public HomelandsGame _game;
 
-    public IKeyHandler _keyHandler { get; set; }
-    public IMouseHandler _mouseHandler { get; set; }
+    public KeyHandlerHomelands _keyHandler;
+    public MouseHandlerHomelands _mouseHandler;
 
     public InputHandler(HomelandsGame game)
     {
@@ -18,10 +18,30 @@ public class InputHandler : IInputHandler
 
     public HomelandsTurnData HandleInput(InputHandlerInfo inputHandlerInfo)
     {
-        dStructurePlacement structureToBuild = _mouseHandler.HandleMouse(inputHandlerInfo._mouseHandlerInfo);
-        KeyHandlerOutput keyHandle = _keyHandler.HandleKeys(inputHandlerInfo._keyHandlerInfo);
+        if (MapNavConfigs._enableMapZoom)
+            HandleZoom(inputHandlerInfo._mouseHandlerInfo);
 
-        HomelandsTurnData htd = new HomelandsTurnData(structureToBuild, keyHandle._turnEnded);
+        MouseHandlerOutput mho = _mouseHandler.GetMouseHandlerOutput(inputHandlerInfo._mouseHandlerInfo);
+        KeyHandlerOutput kho = _keyHandler.HandleKeys(inputHandlerInfo._keyHandlerInfo);
+
+        HomelandsTurnData htd = new HomelandsTurnData(kho, mho);
         return htd;
+    }
+
+
+    void HandleZoom(MouseHandlerInfo mhi)
+    {
+        float d = mhi._axis;
+        if (d != 0)
+        {
+            if (d > 0f)
+            {
+                Camera.main.GetComponent<Camera>().orthographicSize -= 1;
+            }
+            else if (d < 0f)
+            {
+                Camera.main.GetComponent<Camera>().orthographicSize += 1;
+            }
+        }
     }
 }

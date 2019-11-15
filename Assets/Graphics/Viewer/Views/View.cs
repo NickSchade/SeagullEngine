@@ -39,7 +39,7 @@ public abstract class View
     protected Color GetFogOfWarColor(HomelandsLocation location, Stats stats)
     {
         Color c = Color.magenta;
-        eVisibility visibility = stats._vision._visibility[_game._playerSystem.GetPlayer()];
+        eVisibility visibility = stats._vision._visibility[_game._playerSystem._currentPlayer];
         if (visibility == eVisibility.Visible)
         {
             c = GetColorFromTerrain(location._terrain._type);

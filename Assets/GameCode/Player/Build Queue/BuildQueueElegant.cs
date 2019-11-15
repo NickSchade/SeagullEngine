@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 
 
-public class BuildQueueElegant : IBuildQueue
+public class BuildQueueElegant
 {
     public Player _player;
-    List<dStructurePlacement> _queue;
+    public List<dStructurePlacement> _queue;
     int _maxQueueSize;
     public BuildQueueElegant(Player player, int maxQueueSize = 1)
     {
@@ -14,14 +14,13 @@ public class BuildQueueElegant : IBuildQueue
         ResetQueue();
     }
 
-    public List<BuildQueueSet> GetBuildQueue()
+    List<BuildQueueSet> GetBuildQueue()
     {
         List<BuildQueueSet> returnQueue = new List<BuildQueueSet>();
-        int index = 0;
         BuildQueueSet bqs = new BuildQueueSet(_player, _maxQueueSize);
-        while (index < _queue.Count)
+        //Debug.Log($"Queue has {_queue.Count}");
+        foreach (dStructurePlacement dsp in _queue)
         {
-            dStructurePlacement dsp = _queue[index];
             if (!bqs.CanAddToSet(dsp))
             {
                 returnQueue.Add(bqs);
@@ -31,12 +30,16 @@ public class BuildQueueElegant : IBuildQueue
             {
                 bqs.AddToSet(dsp);
             }
-            index++;
         }
-        if (returnQueue.Count > 0 && returnQueue[returnQueue.Count - 1] != bqs)
+        if (!returnQueue.Contains(bqs))
         {
             returnQueue.Add(bqs);
         }
+        //Debug.Log($"There are {returnQueue.Count} sets in the queue");
+        //for (int i = 0; i < returnQueue.Count; i++)
+        //{
+        //    Debug.Log($"{returnQueue[i]._set.Count} in set {i}");
+        //}
         return returnQueue;
     }
 
@@ -46,7 +49,8 @@ public class BuildQueueElegant : IBuildQueue
         if (setQueue.Count > 0)
         {
             BuildQueueSet bqs = setQueue[0];
-            bqs.Build();
+            bool built = bqs.Build();
+            Debug.Log("Built " + (built ? "successfully" : "uncusessfully"));
         }
     }
 

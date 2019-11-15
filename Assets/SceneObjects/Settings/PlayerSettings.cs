@@ -5,18 +5,18 @@ using UnityEngine;
 public class PlayerSettings : MonoBehaviour
 {
     public int _numberOfPlayers;
-    public ePlayerSys _playerSystem;
-    public eBuildQueue _buildQueueType;
-    public PlayerSettings(int numberOfPlayers, ePlayerSys playerSys, eBuildQueue buildQueueType)
-    {
-        _numberOfPlayers = numberOfPlayers;
-        _playerSystem = playerSys;
-        _buildQueueType = buildQueueType;
-    }
     public PlayerSettings(PlayerConfigs configs)
     {
         _numberOfPlayers = configs._numberOfPlayers;
-        _playerSystem = configs._playerSystem;
-        _buildQueueType = configs._buildQueueType;
+    }
+    public PlayerSettings(int numberOfPlayers)
+    {
+        _numberOfPlayers = numberOfPlayers;
+    }
+    public static PlayerSettings ExodusSettings()
+    {
+        int numberOfPlayer = 1;
+
+        return new PlayerSettings(numberOfPlayer);
     }
 }

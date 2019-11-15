@@ -40,7 +40,7 @@ public class StatsBuilderBasic : IStatsBuilder
     Dictionary<Pos, StatsVision> GetPosViewVision()
     {
         Dictionary<Pos, Dictionary<Player, eVisibility>> visibility = new Dictionary<Pos, Dictionary<Player, eVisibility>>();
-        List<Player> players = _game._playerSystem.GetPlayers();
+        List<Player> players = _game._playerSystem._players;
         foreach (Pos p in _game._locations.Keys)
         {
             visibility[p] = new Dictionary<Player, eVisibility>();
@@ -72,7 +72,7 @@ public class StatsBuilderBasic : IStatsBuilder
     Dictionary<Pos, StatsControl> GetPosViewControl()
     {
         Dictionary<Pos, Dictionary<Player, bool>> control = new Dictionary<Pos, Dictionary<Player, bool>>();
-        List<Player> players = _game._playerSystem.GetPlayers();
+        List<Player> players = _game._playerSystem._players;
         foreach (Pos p in _game._locations.Keys)
         {
             control[p] = new Dictionary<Player, bool>();
@@ -81,7 +81,7 @@ public class StatsBuilderBasic : IStatsBuilder
                 control[p][player] = false;
             }
         }
-        Player currentPlayer = _game._playerSystem.GetPlayer();
+        Player currentPlayer = _game._playerSystem._currentPlayer;
         foreach (Pos p in _game._locations.Keys)
         {
             HomelandsStructure structure = _game._locations[p]._structure;
@@ -107,7 +107,7 @@ public class StatsBuilderBasic : IStatsBuilder
     Dictionary<Pos, StatsBuild> GetPosViewBuild()
     {
         Dictionary<Pos, Dictionary<Player, dStructurePlacement>> buildRaw = new Dictionary<Pos, Dictionary<Player, dStructurePlacement>>();
-        List<Player> players = _game._playerSystem.GetPlayers();
+        List<Player> players = _game._playerSystem._players;
         foreach (Pos p in _game._locations.Keys)
         {
             buildRaw[p] = new Dictionary<Player, dStructurePlacement>();
@@ -126,7 +126,7 @@ public class StatsBuilderBasic : IStatsBuilder
     Dictionary<Pos, StatsExtraction> GetPosViewExtraction()
     {
         Dictionary<Pos, Dictionary<Player, float>> extractionRaw = new Dictionary<Pos, Dictionary<Player, float>>();
-        List<Player> players = _game._playerSystem.GetPlayers();
+        List<Player> players = _game._playerSystem._players;
         foreach (Pos p in _game._locations.Keys)
         {
             extractionRaw[p] = new Dictionary<Player, float>();
@@ -157,7 +157,7 @@ public class StatsBuilderBasic : IStatsBuilder
     Dictionary<Pos, StatsMilitary> GetPosViewMilitary()
     {
         Dictionary<Pos, Dictionary<Player,float>> military = new Dictionary<Pos, Dictionary<Player,float>>();
-        List<Player> players = _game._playerSystem.GetPlayers();
+        List<Player> players = _game._playerSystem._players;
         foreach (Pos p in _game._locations.Keys)
         {
             military[p] = new Dictionary<Player, float>();

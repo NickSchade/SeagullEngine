@@ -5,6 +5,8 @@ using UnityEngine;
 public struct GameSettings 
 {
     public eGame _gameType;
+
+    public eEndCondition _endCondition;
     
     public MapSettings _mapSettings;
     
@@ -12,9 +14,11 @@ public struct GameSettings
 
     public TickSettings _tickSettings;
 
-    public GameSettings(eGame gameType, MapSettings map, PlayerSettings player,  TickSettings tick)
+    public GameSettings(eGame gameType, eEndCondition endCondition, MapSettings map, PlayerSettings player,  TickSettings tick)
     {
         _gameType = gameType;
+
+        _endCondition = endCondition;
 
         _mapSettings = map;
 
@@ -25,6 +29,8 @@ public struct GameSettings
     public GameSettings(GameConfigs configs)
     {
         _gameType = configs._gameType;
+
+        _endCondition = configs._endCondition;
         
         _mapSettings = new MapSettings(configs._mapConfigs);
 
@@ -45,7 +51,19 @@ public class FGameSettings
         }
         else if (gameType == eGame.Exodus)
         {
-            return new GameSettings(eGame.Exodus, new MapSettings(configs._mapConfigs), new PlayerSettings(configs._playerConfigs), new TickSettings(configs._tickConfigs));
+            return new GameSettings(eGame.Exodus, 
+                                    eEndCondition.Survival, 
+                                    new MapSettings(configs._mapConfigs), 
+                                    PlayerSettings.ExodusSettings(), 
+                                    TickSettings.ExodusSettings());
+        }
+        else if (gameType == eGame.HotSeat)
+        {
+            return new GameSettings(eGame.HotSeat,
+                                    eEndCondition.LastOneStanding,
+                                    MapSettings.HotseatSettings(),
+                                    new PlayerSettings(configs._playerConfigs),
+                                    TickSettings.HotseatSettings());
         }
         else
         {

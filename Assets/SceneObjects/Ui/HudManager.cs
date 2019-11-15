@@ -20,6 +20,18 @@ public class HudManager : MonoBehaviour
     {
         _hud.UpdateUi(tick);
     }
+    public void ToggleHelp()
+    {
+        _hud.ToggleHelp();
+    }
+    public void ToggleScreen(PlayerSwitchData data = null)
+    {
+        _hud.ToggleScreen(data);
+    }
+    public bool ScreenIsActive()
+    {
+        return _hud._turnSwitch.gameObject.activeSelf;
+    }
 
     // Update is called once per frame
     void Update()

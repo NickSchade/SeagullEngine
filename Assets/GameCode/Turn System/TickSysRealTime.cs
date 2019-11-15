@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class TickSysRealTime : BTickSys, ITickSys
+public class TickSysRealTime : TickSystem
 {
     float _secondsPerTurn;
+    
 
     public TickSysRealTime(HomelandsGame game, TickSettings settings) : base(game, settings)
     {
@@ -14,7 +15,8 @@ public class TickSysRealTime : BTickSys, ITickSys
 
     protected override float GetSecondsUntilNextTurn()
     {
-        float secondsUntilNextTurn = (float)(_lastTurnTime.AddSeconds(_secondsPerTurn) - DateTime.Now).TotalSeconds;
+        
+        float secondsUntilNextTurn = _lastTurnTime + _secondsPerTurn - Time.time;
         return secondsUntilNextTurn;
     }
 

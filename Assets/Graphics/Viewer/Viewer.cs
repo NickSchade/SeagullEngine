@@ -50,7 +50,8 @@ public class Viewer
     }
     List<eView> GetValidViews()
     {
-        return new List<eView> { eView.God, eView.Vision, eView.Control, eView.Extraction, eView.Military };
+        //return new List<eView> { eView.God, eView.Vision, eView.Control, eView.Extraction, eView.Military };
+        return new List<eView> { eView.Vision, eView.Control, eView.Extraction, eView.Military };
     }
     void SetView(eView newView)
     {

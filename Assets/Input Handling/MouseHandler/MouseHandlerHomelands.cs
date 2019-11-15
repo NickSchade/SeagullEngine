@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class MouseHandlerHomelands : IMouseHandler
+public class MouseHandlerHomelands
 {
     Dictionary<Pos, HomelandsLocation> _locations;
 
@@ -9,22 +9,33 @@ public class MouseHandlerHomelands : IMouseHandler
     {
         _locations = locations;
     }
-    public dStructurePlacement HandleMouse(MouseHandlerInfo mhi)
+    public MouseHandlerOutput GetMouseHandlerOutput(MouseHandlerInfo mhi)
     {
-        dStructurePlacement builtBuilding = null;
-        if (mhi._pos != null)
-        {
-            builtBuilding = HandleBuildStructure(mhi);
-        }
-        return builtBuilding;
+        dStructurePlacement builtBuilding = GetStructurePlacement(mhi);
+        SelectedData selected = GetSelectedData(mhi);
+        MouseHandlerOutput mho = new MouseHandlerOutput();
+        mho._structurePlaced = builtBuilding;
+        mho._selected = selected;
+
+        return mho;
     }
-    dStructurePlacement HandleBuildStructure(MouseHandlerInfo mhi)
+    dStructurePlacement GetStructurePlacement(MouseHandlerInfo mhi)
     {
         dStructurePlacement structureToBuild = null;
-        if (mhi._left[eInput.Up])
+        if (mhi._pos != null && mhi._left[eInput.Up])
         {
             structureToBuild = _locations[mhi._pos].Click();
         }
         return structureToBuild;
+    }
+    SelectedData GetSelectedData(MouseHandlerInfo mhi)
+    {
+        SelectedData sd = null;
+        if (mhi._pos != null)
+        {
+            HomelandsLocation loc = _locations[mhi._pos];
+            sd = new SelectedData(loc);
+        }
+        return sd;
     }
 }

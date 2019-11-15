@@ -22,6 +22,22 @@ public abstract class HomelandsStructure
         _hitPoints = placementData.data.hitPoints;
         _radii = placementData.data.radii;
     }
+    public string Describe()
+    {
+        List<string> stats = new List<string>();
+
+        stats.Add("H:" + _hitPoints);
+        stats.Add("C:" + _cost);
+        foreach (eRadius rad in _radii.Keys)
+        {
+            stats.Add(rad.ToString()[0] + ":" + _radii[rad]._range.ToString());
+        }
+
+        string desc = string.Join(";", stats);
+
+        desc = _owner._name;
+        return desc;
+    }
     public void TakeDamage(float damageAmount)
     {
         if (damageAmount >= _hitPoints)

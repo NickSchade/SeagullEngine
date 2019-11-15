@@ -63,44 +63,55 @@ public abstract class HomelandsLocation
     }
     
 
-    public virtual bool TryToMakeStructure(dStructure structureToBuild)
+    public virtual bool TryToMakeStructure(Player currentPlayer, dStructure structureToBuild)
     {
         bool madeStructure = false;
-        Player currentPlayer = _game._playerSystem.GetPlayer();
-
-        if (_structure == null)
+        if (currentPlayer != null)
         {
-            if (_terrain._type == eTerrain.Land)
+            if (_structure == null)
             {
-                if (_game._stats._numberOfStructures[currentPlayer] <= 0 || _stats._control._controllingPlayers[currentPlayer])
+                if (_terrain._type == eTerrain.Land)
                 {
-                    dStructurePlacement potentialSd = new dStructurePlacement(structureToBuild, currentPlayer, this);
-                    madeStructure = currentPlayer._buildQueue.TryToAddStructureToBuildQueue(potentialSd);
-                    Debug.Log($"{currentPlayer._name} added a structure to the build queue");
+                    if (_game._stats._numberOfStructures[currentPlayer] <= 0 || _stats._control._controllingPlayers[currentPlayer])
+                    {
+                        dStructurePlacement potentialSd = new dStructurePlacement(structureToBuild, currentPlayer, this);
+                        madeStructure = currentPlayer._buildQueue.TryToAddStructureToBuildQueue(potentialSd);
+                        Debug.Log($"{currentPlayer._name} added a structure to the build queue");
+                    }
+                    else
+                    {
+                        Debug.Log($"{currentPlayer._name} can't Build - Not Controlled");
+                    }
                 }
                 else
                 {
-                    Debug.Log($"{currentPlayer._name} can't Build - Not Controlled");
+                    Debug.Log($"{currentPlayer._name} can't Build - Unbuildable");
                 }
+
             }
             else
             {
-                Debug.Log($"{currentPlayer._name} can't Build - Unbuildable");
+                Debug.Log("Can't Build - Occupied");
             }
-            
         }
         else
         {
-            Debug.Log("Can't Build - Occupied");
+            Debug.Log("Can't Build - No Player");
         }
+        
         return madeStructure;
     }
     public virtual dStructurePlacement Click()
     {
+        Player currentPlayer = _game._playerSystem._currentPlayer;
+        dStructurePlacement dsp = Click(currentPlayer);
+        return dsp;
+    }
+    public virtual dStructurePlacement Click(Player currentPlayer)
+    {
         dStructure structureToBuild = GetBasicStructure();
-        Player currentPlayer = _game._playerSystem.GetPlayer();
         dStructurePlacement spd = new dStructurePlacement(structureToBuild, currentPlayer, this);
-        bool placementSuccess = TryToMakeStructure(structureToBuild);
+        bool placementSuccess = TryToMakeStructure(currentPlayer, structureToBuild);
         if (placementSuccess)
         {
             return spd;
@@ -117,30 +128,37 @@ public abstract class HomelandsLocation
         StructureGraphicsData sgd = null;
         ResourceGraphicsData rgd = null;
 
-        Player currentPlayer = _game._playerSystem.GetPlayer();
-
-        bool visibleToPlayer = _stats._vision._visibility[currentPlayer] == eVisibility.Visible;
-        bool visibleBecauseGodMode = _game._viewer._viewType == eView.God;
-
-        if (visibleToPlayer || visibleBecauseGodMode)
+        Player currentPlayer = _game._playerSystem._currentPlayer;
+        if (currentPlayer != null)
         {
-            if (_structure != null)
+            bool visibleToPlayer = _stats._vision._visibility[currentPlayer] == eVisibility.Visible;
+            bool visibleBecauseGodMode = _game._viewer._viewType == eView.God;
+
+            if (visibleToPlayer || visibleBecauseGodMode)
             {
-                sgd = _structure.Draw();
+                if (_structure != null)
+                {
+                    sgd = _structure.Draw();
+                }
+                if (_stats._build._buildingsQueued[currentPlayer] != null)
+                {
+                    sgd = new StructureGraphicsData(Color.black);
+                }
+                if (_resource != null)
+                {
+                    rgd = _resource.Draw();
+                }
             }
-            if (_stats._build._buildingsQueued[currentPlayer] != null)
-            {
-                sgd = new StructureGraphicsData(Color.black);
-            }
-            if (_resource != null)
-            {
-                rgd = _resource.Draw();
-            }
+
+            GraphicsData gd = new GraphicsData(_pos, lgd, sgd, rgd);
+
+            return gd;
         }
-
-        GraphicsData gd = new GraphicsData(_pos, lgd, sgd, rgd);
-
-        return gd;
+        else
+        {
+            return null;
+        }
+        
     }
     
     

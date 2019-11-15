@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct GraphicsData
+public class GraphicsData
 {
     public Pos _pos;
     public LocationGraphicsData _location;
