@@ -31,7 +31,7 @@ public class GraphicsManager : MonoBehaviour
 
     GameObject InstantiateGo(GameObject pf, Pos p, Color c)
     {
-        Loc l = p.mapLoc;
+        Loc l = p._mapLoc;
         Vector3 pos = new Vector3(l.x() * xSpread, l.z(), l.y() * ySpread);
         GameObject go = Instantiate(pf, pos, Quaternion.identity, _dynamic.transform);
         go.GetComponentInChildren<Clickable>().setPos(p);

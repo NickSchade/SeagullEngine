@@ -11,9 +11,9 @@ public class NeighborBuilderSquare : NeighborBuilder
     }
     public override void SetNeighbors(Pos p)
     {
-        p.neighbors = new List<Pos>();
-        float x = p.gridLoc.x();
-        float y = p.gridLoc.y();
+        p._neighbors = new List<Pos>();
+        float x = p._gridLoc.x();
+        float y = p._gridLoc.y();
         for (int i = -1; i <= 1; i++)
         {
             for (int j = -1; j <= 1; j++)
@@ -29,7 +29,7 @@ public class NeighborBuilderSquare : NeighborBuilder
                         Pos potentialNeighbor = mapInfo.pathMap[l2.key()];
                         if (mapInfo.locations[p]._terrain._type == mapInfo.locations[potentialNeighbor]._terrain._type)
                         {
-                            p.neighbors.Add(potentialNeighbor);
+                            p._neighbors.Add(potentialNeighbor);
                         }
                     }
                 }

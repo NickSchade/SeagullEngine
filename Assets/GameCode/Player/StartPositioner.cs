@@ -23,7 +23,7 @@ public abstract class StartPositioner
             Loc startingLoc = startingLocs[player];
             foreach (Pos pos in _game._locations.Keys)
             {
-                if (pos.gridLoc.key() == startingLoc.key())
+                if (pos._gridLoc.key() == startingLoc.key())
                 {
                     startingPos[player] = pos;
                     break;

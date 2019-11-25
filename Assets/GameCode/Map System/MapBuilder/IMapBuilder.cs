@@ -10,15 +10,15 @@ public enum eMap { Gaea, Basic };
 
 public static class MapBuilderFactory
 {
-    public static IMapBuilder Make(eMap mapType, HomelandsGame game)
+    public static IMapBuilder Make(eMap mapType, eTileShape tileShape, HomelandsGame game)
     {
         if (mapType == eMap.Gaea)
         {
-            return new MapBuilderGaea(game);
+            return new MapBuilderGaea(game, tileShape);
         }
         else if (mapType == eMap.Basic)
         {
-            return new MapBuilderBasic(game);
+            return new MapBuilderBasic(game, tileShape);
         }
         else
         {

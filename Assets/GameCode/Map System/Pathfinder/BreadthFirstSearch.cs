@@ -67,7 +67,7 @@ public class BreadthFirstSearchRadius
     }
     List<Pos> SearchPathNeighbors(List<Pos> neighborsToSearch, Pos neighborToPath)
     {
-        foreach (Pos p in neighborToPath.neighbors)
+        foreach (Pos p in neighborToPath._neighbors)
         {
             UpdatePathCost(p, neighborToPath);
             if (!neighborsToSearch.Contains(p) && !_searched.Contains(p))
@@ -94,7 +94,7 @@ public class BreadthFirstSearchRadius
         // Create the queue of pos to check
         List<Pos> nextStep = new List<Pos>();
         // Add start pos' neighbors to queue
-        foreach (Pos p in _start.neighbors)
+        foreach (Pos p in _start._neighbors)
         {
             _distanceFromStart[p] = Pathfinder.GetMoveCost(p, _start);
             _fastestPath[p] = _start;

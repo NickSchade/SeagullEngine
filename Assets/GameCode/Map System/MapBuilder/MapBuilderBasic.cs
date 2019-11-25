@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 public class MapBuilderBasic : MapBuilderBase, IMapBuilder
 {
-    public MapBuilderBasic(HomelandsGame game)
+    public MapBuilderBasic(HomelandsGame game, eTileShape tileShape)
     {
         _game = game;
+        _tileShape = tileShape;
     }
     public Dictionary<Pos, HomelandsLocation> Make(MapSettings mapSettings)
     {

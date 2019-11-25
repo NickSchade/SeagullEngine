@@ -5,7 +5,7 @@ public class MapLocSetterSquare : IMapLocSetter
 {
     public Loc GetMapLoc(Pos p)
     {
-        Loc mapLoc = new Loc(p.gridLoc.coordinates);
+        Loc mapLoc = new Loc(p._gridLoc.coordinates);
         return mapLoc;
     }
 }

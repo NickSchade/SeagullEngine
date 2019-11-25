@@ -38,7 +38,7 @@ public class AstarPathfinder
             while (!pathFound && _iter < _maxIter)
             {
                 Pos neighborToPath = SelectNeighborToPath(neighborsToSearch);
-                if (neighborToPath.neighbors.Contains(_end))
+                if (neighborToPath._neighbors.Contains(_end))
                 {
                     pathFound = FinishPath(neighborToPath);
                 }
@@ -59,7 +59,7 @@ public class AstarPathfinder
         // Create the queue of pos to check
         List<Pos> nextStep = new List<Pos>();
         // Add start pos' neighbors to queue
-        foreach (Pos p in _start.neighbors)
+        foreach (Pos p in _start._neighbors)
         {
             _distanceFromStart[p] = Pathfinder.GetMoveCost(p, _start);
             _distanceToEnd[p] = Pathfinder.GetMinkowskiDistance(p, _end);
@@ -70,7 +70,7 @@ public class AstarPathfinder
     }
     List<Pos> SearchPathNeighbors(List<Pos> neighborsToSearch, Pos neighborToPath)
     {
-        foreach (Pos p in neighborToPath.neighbors)
+        foreach (Pos p in neighborToPath._neighbors)
         {
             UpdatePathCost(p, neighborToPath);
             if (!_distanceToEnd.ContainsKey(p))

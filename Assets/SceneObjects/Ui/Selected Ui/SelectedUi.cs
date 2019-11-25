@@ -24,7 +24,7 @@ public class SelectedUi : MonoBehaviour
     void UpdateText(Pos pos, eTerrain terrain, HomelandsStructure structure)
     {
         string posString = 
-        _posText.text = pos.gridLoc.key();
+        _posText.text = pos._gridLoc.key();
 
         _terrainText.text = terrain.ToString();
         _structureText.text = structure == null ? "" : structure.Describe();

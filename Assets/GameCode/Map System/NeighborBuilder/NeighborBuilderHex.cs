@@ -11,10 +11,10 @@ public class NeighborBuilderHex : NeighborBuilder
     }
     public override void SetNeighbors(Pos p)
     {
-        p.neighbors = new List<Pos>();
+        p._neighbors = new List<Pos>();
 
         List<int[]> hexNeighbors = new List<int[]>();
-        if (p.gridLoc.y() % 2 == 0)
+        if (p._gridLoc.y() % 2 == 0)
         {
             hexNeighbors.Add(new int[] { 1, 0 });
             hexNeighbors.Add(new int[] { 1, -1 });
@@ -35,8 +35,8 @@ public class NeighborBuilderHex : NeighborBuilder
         }
 
 
-        float x = p.gridLoc.x();
-        float y = p.gridLoc.y();
+        float x = p._gridLoc.x();
+        float y = p._gridLoc.y();
         for (int k = 0; k < hexNeighbors.Count; k++)
         {
             int i = hexNeighbors[k][0];
@@ -50,7 +50,7 @@ public class NeighborBuilderHex : NeighborBuilder
                 Pos potentialNeighbor = mapInfo.pathMap[l2.key()];
                 if (mapInfo.locations[p]._terrain._type == mapInfo.locations[potentialNeighbor]._terrain._type)
                 {
-                    p.neighbors.Add(potentialNeighbor);
+                    p._neighbors.Add(potentialNeighbor);
                 }
             }
         }

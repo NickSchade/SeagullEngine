@@ -5,14 +5,19 @@ using System.Linq;
 
 public class Pos
 {
-    public Loc gridLoc;
-    public Loc mapLoc;
-    public List<Pos> neighbors;
+    public Loc _gridLoc;
+    public Loc _mapLoc;
+    public List<Pos> _neighbors;
 
     public Pos(Loc _loc, IMapLocSetter mapLocSetter)
     {
-        gridLoc = _loc;
-        mapLoc = mapLocSetter.GetMapLoc(this);
+        _gridLoc = _loc;
+        _mapLoc = mapLocSetter.GetMapLoc(this);
+    }
+    public Pos(Loc gridLoc, Loc mapLoc)
+    {
+        _gridLoc = gridLoc;
+        _mapLoc = mapLoc;
     }
     
 }

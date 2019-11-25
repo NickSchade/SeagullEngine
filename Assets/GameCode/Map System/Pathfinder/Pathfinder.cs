@@ -8,16 +8,16 @@ public static class Pathfinder
     public static float GetMinkowskiDistance(Pos start, Pos end, float minkowski = 2)
     {
         float pSum = 0f;
-        for (int i = 0; i < start.mapLoc.coordinates.Length; i++)
+        for (int i = 0; i < start._mapLoc.coordinates.Length; i++)
         {
-            pSum += Mathf.Pow(Mathf.Abs(start.mapLoc.coordinates[i] - end.mapLoc.coordinates[i]), minkowski);
+            pSum += Mathf.Pow(Mathf.Abs(start._mapLoc.coordinates[i] - end._mapLoc.coordinates[i]), minkowski);
         }
         return Mathf.Pow(pSum, (1 / minkowski));
     }
 
     public static float GetMoveCost(Pos start, Pos end)
     {
-        if (start.neighbors.Contains(end))
+        if (start._neighbors.Contains(end))
         {
             float distance = GetMinkowskiDistance(start, end);
             return distance;

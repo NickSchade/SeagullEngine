@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class MapBuilderGaea : MapBuilderBase, IMapBuilder
 {
-    public MapBuilderGaea(HomelandsGame game)
+    public MapBuilderGaea(HomelandsGame game, eTileShape tileShape)
     {
         _game = game;
+        _tileShape = tileShape;
     }
 
     public Dictionary<Pos, HomelandsLocation> Make(MapSettings settings)
@@ -16,7 +17,7 @@ public class MapBuilderGaea : MapBuilderBase, IMapBuilder
         GaeaWorldbuilder map = new GaeaWorldbuilder(settings);
         map.GenerateMap();
 
-        IMapLocSetter mapLocSetter = MapLocSetterFactory.Make(_game._settings._mapSettings._tileShape);
+        IMapLocSetter mapLocSetter = MapLocSetterFactory.Make(_tileShape);
 
         Dictionary<Pos, HomelandsLocation> locations = BuildLocations(map, mapLocSetter);
 

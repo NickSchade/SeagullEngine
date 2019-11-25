@@ -35,7 +35,7 @@ public abstract partial class HomelandsGame
         _statsBuilder = new StatsBuilderBasic(this);
         _viewer = new Viewer(this);
 
-        IMapBuilder mapBuilder = MapBuilderFactory.Make(_settings._mapSettings._mapType, this);
+        IMapBuilder mapBuilder = MapBuilderFactory.Make(_settings._mapSettings._mapType, _settings._mapSettings._tileShape, this);
 
         _locations = mapBuilder.Make(_settings._mapSettings);
         _inputHandler = new InputHandler(this);

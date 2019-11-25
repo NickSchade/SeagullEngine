@@ -5,6 +5,7 @@ using System.Collections;
 public abstract class MapBuilderBase
 {
     public HomelandsGame _game;
+    public eTileShape _tileShape;
 
     public Dictionary<Pos, HomelandsLocation> SetNeighbors(MapSettings settings, Dictionary<Pos, HomelandsLocation> locations)
     {
@@ -24,7 +25,7 @@ public abstract class MapBuilderBase
 
         foreach (Pos p in locations.Keys)
         {
-            stringMap[p.gridLoc.key()] = p;
+            stringMap[p._gridLoc.key()] = p;
         }
         return stringMap;
     }
